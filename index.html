@@ -5,681 +5,443 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FTE Budget Tracker</title>
-
 <style>
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background: #f4f3f0;
-  color: #1a1916;
-  font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  min-height: 100vh;
+background: #1a8a8a;
+color: #1a1916;
+font-family: ‘Segoe UI’, Tahoma, Geneva, sans-serif;
+font-size: 14px;
+line-height: 1.5;
+min-height: 100vh;
 }
 
-/* ── VIEWS ── */
 .view { display: none; }
 .view.active { display: block; }
 
-/* ── TOPBAR ── */
+/* TOPBAR */
 .topbar {
-  background: #ffffff;
-  border-bottom: 1px solid #e2e0db;
-  padding: 0 28px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  box-shadow: 0 1px 0 #e2e0db;
+background: #ffffff;
+border-bottom: 1px solid #e2e0db;
+padding: 0 24px;
+height: 52px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+position: sticky;
+top: 0;
+z-index: 200;
+box-shadow: 0 2px 6px #0d5555;
 }
-.topbar-left { display: flex; align-items: center; gap: 20px; }
-.org-name {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 18px;
-  color: #1a1916;
-  letter-spacing: -0.2px;
-}
-.topbar-divider {
-  width: 1px; height: 20px;
-  background: #d0cdc6;
-}
-.page-title {
-  font-size: 13px;
-  font-weight: 500;
-  color: #7a7870;
-}
-.topbar-right { display: flex; align-items: center; gap: 12px; }
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.org-name { font-family: Georgia, serif; font-size: 17px; color: #1a1916; letter-spacing: -0.2px; }
+.topbar-divider { width: 1px; height: 18px; background: #d0cdc6; }
+.page-title { font-size: 12px; font-weight: 500; color: #7a7870; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
 .user-chip {
-  display: flex; align-items: center; gap: 8px;
-  background: #fafaf8;
-  border: 1px solid #e2e0db;
-  border-radius: 20px;
-  padding: 5px 12px 5px 6px;
-  font-size: 12px;
-  color: #7a7870;
+display: flex; align-items: center; gap: 7px;
+background: #f5fafa; border: 1px solid #e2e0db;
+border-radius: 20px; padding: 4px 10px 4px 5px;
+font-size: 12px; color: #7a7870;
 }
 .user-avatar {
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  background: #1a3a6b;
-  color: white;
-  font-size: 10px;
-  font-weight: 600;
-  display: grid;
-  place-items: center;
+width: 22px; height: 22px; border-radius: 50%;
+background: #1a3a6b; color: #ffffff;
+font-size: 9px; font-weight: 700;
+display: flex; align-items: center; justify-content: center;
 }
 .nav-btn {
-  font-size: 12px;
-  font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
-  font-weight: 500;
-  color: #7a7870;
-  background: none;
-  border: 1px solid #e2e0db;
-  border-radius: 6px;
-  padding: 5px 12px;
-  cursor: pointer;
-  transition: all 0.15s;
+font-size: 12px; font-family: ‘Segoe UI’, sans-serif; font-weight: 500;
+color: #7a7870; background: none; border: 1px solid #e2e0db;
+border-radius: 6px; padding: 5px 11px; cursor: pointer;
 }
-.nav-btn:hover { background: #fafaf8; color: #1a1916; }
-.nav-btn.active { background: #1a3a6b; color: white; border-color: #1a3a6b; }
+.nav-btn.active { background: #1a3a6b; color: #ffffff; border-color: #1a3a6b; }
 
-/* ── PERIOD BAND ── */
+/* PERIOD BAND */
 .period-band {
-  background: #1a3a6b;
-  color: rgba(255,255,255,0.9);
-  padding: 8px 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
-  font-family: Consolas, 'Courier New', monospace;
+background: #0d5a5a;
+color: #e0f4f4;
+padding: 7px 24px;
+display: flex; align-items: center; justify-content: space-between;
+font-size: 12px; font-family: Consolas, ‘Courier New’, monospace;
 }
-.period-band strong { color: white; font-weight: 500; }
+.period-band strong { color: #ffffff; }
 .period-pill {
-  background: rgba(255,255,255,0.15);
-  border-radius: 20px;
-  padding: 2px 10px;
-  font-size: 11px;
+background: #1a7a7a; border-radius: 20px;
+padding: 2px 10px; font-size: 11px; color: #c0e8e8;
 }
 
-/* ── MAIN ── */
-.main { padding: 28px; max-width: 1080px; margin: 0 auto; }
+/* MAIN */
+.main { padding: 20px 24px; max-width: 1080px; margin: 0 auto; }
 
-/* ── DEPT HEADER ── */
+/* DEPT HEADER */
 .dept-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 24px;
-  gap: 20px;
+display: flex; align-items: flex-start;
+justify-content: space-between;
+margin-bottom: 18px; gap: 16px;
 }
 .dept-name {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 32px;
-  letter-spacing: -0.5px;
-  line-height: 1.1;
-  color: #1a1916;
+font-family: Georgia, serif; font-size: 30px;
+letter-spacing: -0.5px; line-height: 1.1; color: #ffffff;
+text-shadow: 0 1px 4px #0a4a4a;
 }
-.dept-meta {
-  display: flex;
-  gap: 8px;
-  margin-top: 6px;
-  flex-wrap: wrap;
-}
+.dept-meta { display: flex; gap: 7px; margin-top: 6px; flex-wrap: wrap; }
 .dept-tag {
-  font-size: 11px;
-  font-family: Consolas, 'Courier New', monospace;
-  padding: 3px 10px;
-  border-radius: 20px;
-  border: 1px solid #d0cdc6;
-  color: #7a7870;
-  background: #ffffff;
+font-size: 11px; font-family: Consolas, ‘Courier New’, monospace;
+padding: 3px 10px; border-radius: 20px;
+border: 1px solid #d0cdc6; color: #7a7870; background: #ffffff;
 }
 .dept-tag.type-fixed { background: #e8f0fd; color: #1a3a6b; border-color: #c0d4f5; }
 .dept-tag.type-variable { background: #f3eeff; color: #5b2da0; border-color: #d9c5f5; }
 .last-updated {
-  font-size: 11px;
-  color: #a8a59f;
-  font-family: Consolas, 'Courier New', monospace;
-  text-align: right;
-  flex-shrink: 0;
-  padding-top: 6px;
+font-size: 11px; color: #c0e8e8;
+font-family: Consolas, ‘Courier New’, monospace;
+text-align: right; flex-shrink: 0; padding-top: 4px;
 }
 
-/* ── STATUS CARD ── */
+/* STATUS CARD */
 .status-card {
-  border-radius: 10px;
-  padding: 24px 28px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  border: 1.5px solid;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
-  transition: all 0.3s;
-  animation: fadeUp 0.4s ease both;
+border-radius: 12px; padding: 22px 24px; margin-bottom: 16px;
+display: flex; align-items: center; gap: 20px;
+border: 2px solid; box-shadow: 0 4px 16px #0a4a4a;
+transition: all 0.3s;
 }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.status-card.ok { background: #d6f0e0; border-color: #9ddbb8; }
-.status-card.warn { background: #fef3cd; border-color: #f0d080; }
-.status-card.over { background: #fde8e8; border-color: #f0a0a0; }
+.status-card.ok { background: #d6f0e0; border-color: #6dcc99; }
+.status-card.warn { background: #fef3cd; border-color: #e8c84a; }
+.status-card.over { background: #fde8e8; border-color: #e88080; }
 
 .status-indicator {
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  display: grid; place-items: center;
-  font-size: 22px;
-  flex-shrink: 0;
+width: 48px; height: 48px; border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-size: 20px; color: #ffffff; flex-shrink: 0; font-weight: 700;
 }
 .status-card.ok .status-indicator { background: #2d9d5c; }
 .status-card.warn .status-indicator { background: #d4900a; }
 .status-card.over .status-indicator { background: #c0392b; }
 
-.status-body { flex: 1; }
+.status-body { flex: 1; min-width: 0; }
 .status-headline {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 20px;
-  letter-spacing: -0.2px;
-  margin-bottom: 4px;
+font-family: Georgia, serif; font-size: 19px;
+letter-spacing: -0.2px; margin-bottom: 5px;
 }
 .status-card.ok .status-headline { color: #1a6b3c; }
 .status-card.warn .status-headline { color: #8a6200; }
 .status-card.over .status-headline { color: #8b1a1a; }
-.status-sub { font-size: 13px; color: #7a7870; line-height: 1.6; max-width: 560px; }
+.status-sub { font-size: 13px; color: #5a5850; line-height: 1.6; }
 
 .status-right { text-align: right; flex-shrink: 0; }
 .status-big {
-  font-family: Consolas, 'Courier New', monospace;
-  font-size: 42px;
-  font-weight: 500;
-  letter-spacing: -2px;
-  line-height: 1;
+font-family: Consolas, ‘Courier New’, monospace;
+font-size: 40px; font-weight: 700; letter-spacing: -2px; line-height: 1;
 }
 .status-card.ok .status-big { color: #1a6b3c; }
 .status-card.warn .status-big { color: #8a6200; }
 .status-card.over .status-big { color: #8b1a1a; }
-.status-big-label { font-size: 11px; color: #7a7870; font-family: Consolas, 'Courier New', monospace; margin-top: 4px; }
+.status-big-label { font-size: 11px; color: #7a7870; font-family: Consolas, ‘Courier New’, monospace; margin-top: 4px; }
 
-/* ── PROGRESS ── */
+/* PROGRESS */
 .progress-card {
-  background: #ffffff;
-  border: 1px solid #e2e0db;
-  border-radius: 10px;
-  padding: 20px 24px;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
-  animation: fadeUp 0.4s 0.05s ease both;
+background: #ffffff; border: 1px solid #e2e0db;
+border-radius: 12px; padding: 18px 22px; margin-bottom: 16px;
+box-shadow: 0 2px 8px #0a4a4a;
 }
 .progress-top {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 14px;
+display: flex; justify-content: space-between; align-items: center;
+margin-bottom: 12px;
 }
 .progress-label {
-  font-size: 11px;
-  font-family: Consolas, 'Courier New', monospace;
-  color: #7a7870;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+font-size: 11px; font-family: Consolas, ‘Courier New’, monospace;
+color: #7a7870; text-transform: uppercase; letter-spacing: 1px;
 }
-.progress-pcts { display: flex; gap: 16px; font-size: 11px; font-family: Consolas, 'Courier New', monospace; }
+.progress-pcts { display: flex; gap: 14px; font-size: 11px; font-family: Consolas, ‘Courier New’, monospace; }
 .pct-item { display: flex; align-items: center; gap: 5px; color: #7a7870; }
 .pct-dot { width: 8px; height: 8px; border-radius: 50%; }
 
 .track-outer {
-  height: 10px;
-  background: #f4f3f0;
-  border-radius: 10px;
-  position: relative;
-  overflow: visible;
-  margin-bottom: 8px;
-  border: 1px solid #e2e0db;
+height: 12px; background: #e8f4f4; border-radius: 12px;
+position: relative; overflow: visible; margin-bottom: 8px;
+border: 1px solid #c0dede;
 }
 .track-inner {
-  height: 100%;
-  border-radius: 10px;
-  transition: width 0.8s cubic-bezier(.4,0,.2,1);
-  position: relative;
+height: 100%; border-radius: 12px;
+transition: width 0.8s cubic-bezier(.4,0,.2,1);
 }
 .track-inner.ok { background: linear-gradient(90deg, #2d9d5c, #4dc87a); }
 .track-inner.warn { background: linear-gradient(90deg, #c0870a, #f0b430); }
 .track-inner.over { background: linear-gradient(90deg, #b02020, #e05050); }
 
 .pace-line {
-  position: absolute;
-  top: -4px; bottom: -4px;
-  width: 2px;
-  background: #2563bc;
-  border-radius: 2px;
-  transition: left 0.5s;
+position: absolute; top: -5px; bottom: -5px;
+width: 3px; background: #2563bc; border-radius: 2px;
+transition: left 0.5s;
 }
 .pace-line::after {
-  content: 'expected';
-  position: absolute;
-  top: -18px; left: 50%;
-  transform: translateX(-50%);
-  font-size: 9px;
-  font-family: Consolas, 'Courier New', monospace;
-  color: #2563bc;
-  white-space: nowrap;
+content: ‘expected’;
+position: absolute; top: -17px; left: 50%;
+transform: translateX(-50%);
+font-size: 9px; font-family: Consolas, ‘Courier New’, monospace;
+color: #2563bc; white-space: nowrap; font-weight: 600;
 }
 
 .day-ticks {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 0;
-  margin-top: 6px;
+display: flex; justify-content: space-between; margin-top: 6px;
 }
-.day-tick { font-size: 10px; font-family: Consolas, 'Courier New', monospace; color: #a8a59f; }
-.day-tick.current { color: #1a1916; font-weight: 500; }
+.day-tick { font-size: 10px; font-family: Consolas, ‘Courier New’, monospace; color: #a8a59f; }
+.day-tick.current { color: #1a1916; font-weight: 600; }
 
-/* ── KPI ROW ── */
+/* KPI ROW */
 .kpi-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-bottom: 20px;
+display: grid; grid-template-columns: repeat(4, 1fr);
+gap: 12px; margin-bottom: 16px;
 }
 .kpi {
-  background: #ffffff;
-  border: 1px solid #e2e0db;
-  border-radius: 10px;
-  padding: 18px 20px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
-  animation: fadeUp 0.4s ease both;
+background: #ffffff; border: 1px solid #e2e0db;
+border-radius: 12px; padding: 16px 18px;
+box-shadow: 0 2px 8px #0a4a4a;
 }
-.kpi:nth-child(1) { animation-delay: 0.08s; }
-.kpi:nth-child(2) { animation-delay: 0.12s; }
-.kpi:nth-child(3) { animation-delay: 0.16s; }
-.kpi:nth-child(4) { animation-delay: 0.20s; }
 .kpi-label {
-  font-size: 10px;
-  font-family: Consolas, 'Courier New', monospace;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #7a7870;
-  margin-bottom: 10px;
+font-size: 10px; font-family: Consolas, ‘Courier New’, monospace;
+text-transform: uppercase; letter-spacing: 1px;
+color: #7a7870; margin-bottom: 8px;
 }
 .kpi-val {
-  font-size: 26px;
-  font-family: Consolas, 'Courier New', monospace;
-  font-weight: 500;
-  letter-spacing: -1px;
-  line-height: 1;
-  margin-bottom: 6px;
+font-size: 24px; font-family: Consolas, ‘Courier New’, monospace;
+font-weight: 600; letter-spacing: -1px; line-height: 1; margin-bottom: 5px;
 }
-.kpi-sub { font-size: 11px; color: #a8a59f; font-family: Consolas, 'Courier New', monospace; }
+.kpi-sub { font-size: 11px; color: #a8a59f; font-family: Consolas, ‘Courier New’, monospace; }
 .kpi-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 10px;
-  font-family: Consolas, 'Courier New', monospace;
-  padding: 2px 7px;
-  border-radius: 4px;
-  margin-top: 6px;
+display: inline-flex; align-items: center; gap: 3px;
+font-size: 10px; font-family: Consolas, ‘Courier New’, monospace;
+padding: 2px 7px; border-radius: 4px; margin-top: 5px;
 }
 .badge-green { background: #d6f0e0; color: #1a6b3c; }
 .badge-yellow { background: #fef3cd; color: #8a6200; }
 .badge-red { background: #fde8e8; color: #8b1a1a; }
 .badge-blue { background: #e8f0fd; color: #1a3a6b; }
-
-/* ── TWO PANEL ── */
-.two-panel {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 20px;
-}
-.panel {
-  background: #ffffff;
-  border: 1px solid #e2e0db;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
-  animation: fadeUp 0.4s 0.25s ease both;
-}
-.panel-header {
-  padding: 14px 20px;
-  border-bottom: 1px solid #e2e0db;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #fafaf8;
-}
-.panel-title { font-size: 12px; font-weight: 600; color: #1a1916; }
-.panel-subtitle { font-size: 11px; font-family: Consolas, 'Courier New', monospace; color: #a8a59f; }
-.panel-badge {
-  font-size: 10px;
-  font-family: Consolas, 'Courier New', monospace;
-  padding: 3px 9px;
-  border-radius: 20px;
-}
-.badge-now { background: #1a3a6b; color: white; }
-.badge-plan { background: #e2e0db; color: #7a7870; }
-
-.panel-body { padding: 4px 0; }
-.panel-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 11px 20px;
-  border-bottom: 1px solid #e2e0db;
-}
-.panel-row:last-child { border-bottom: none; }
-.panel-row-label { font-size: 13px; color: #7a7870; }
-.panel-row-val { font-size: 14px; font-family: Consolas, 'Courier New', monospace; font-weight: 500; }
 .val-green { color: #1a6b3c; }
 .val-yellow { color: #8a6200; }
 .val-red { color: #8b1a1a; }
 .val-blue { color: #2563bc; }
 .val-muted { color: #7a7870; }
 
-/* ── FORMULA PANEL ── */
+/* TWO PANEL */
+.two-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.panel {
+background: #ffffff; border: 1px solid #e2e0db;
+border-radius: 12px; overflow: hidden;
+box-shadow: 0 2px 8px #0a4a4a;
+}
+.panel-header {
+padding: 12px 18px; border-bottom: 1px solid #e2e0db;
+display: flex; justify-content: space-between; align-items: center;
+background: #f5fafa;
+}
+.panel-title { font-size: 12px; font-weight: 600; color: #1a1916; }
+.panel-subtitle { font-size: 11px; font-family: Consolas, ‘Courier New’, monospace; color: #a8a59f; margin-top: 1px; }
+.panel-badge {
+font-size: 10px; font-family: Consolas, ‘Courier New’, monospace;
+padding: 3px 9px; border-radius: 20px;
+}
+.badge-now { background: #1a3a6b; color: #ffffff; }
+.badge-plan { background: #e2e0db; color: #7a7870; }
+
+.panel-body { padding: 4px 0; }
+.panel-row {
+display: flex; justify-content: space-between; align-items: center;
+padding: 10px 18px; border-bottom: 1px solid #f0eee9;
+}
+.panel-row:last-child { border-bottom: none; }
+.panel-row-label { font-size: 13px; color: #7a7870; }
+.panel-row-val { font-size: 14px; font-family: Consolas, ‘Courier New’, monospace; font-weight: 600; }
+
+/* FORMULA */
 .formula-section {
-  background: #ffffff;
-  border: 1px solid #e2e0db;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
-  margin-bottom: 20px;
-  animation: fadeUp 0.4s 0.3s ease both;
+background: #ffffff; border: 1px solid #e2e0db;
+border-radius: 12px; overflow: hidden;
+box-shadow: 0 2px 8px #0a4a4a; margin-bottom: 16px;
 }
 .formula-toggle {
-  padding: 14px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  background: #fafaf8;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s;
+padding: 13px 18px; display: flex; justify-content: space-between;
+align-items: center; cursor: pointer; user-select: none;
+background: #f5fafa; border-bottom: 1px solid transparent;
 }
 .formula-toggle.open { border-bottom-color: #e2e0db; }
 .formula-toggle-left { display: flex; align-items: center; gap: 10px; }
 .formula-toggle-title { font-size: 13px; font-weight: 600; }
-.formula-toggle-sub { font-size: 11px; color: #a8a59f; font-family: Consolas, 'Courier New', monospace; }
+.formula-toggle-sub { font-size: 11px; color: #a8a59f; font-family: Consolas, ‘Courier New’, monospace; }
 .formula-toggle-btn {
-  font-size: 11px; font-family: Consolas, 'Courier New', monospace;
-  color: #2563bc; background: none; border: none;
-  cursor: pointer; padding: 4px 8px;
+font-size: 11px; font-family: Consolas, ‘Courier New’, monospace;
+color: #2563bc; background: none; border: none; cursor: pointer; padding: 4px 8px;
 }
-.formula-body { display: none; padding: 20px; }
-.formula-body.open { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.formula-body { display: none; padding: 16px; }
+.formula-body.open { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .fml-card {
-  background: #fafaf8;
-  border: 1px solid #e2e0db;
-  border-radius: 8px;
-  padding: 14px 16px;
+background: #f5fafa; border: 1px solid #e2e0db;
+border-radius: 8px; padding: 12px 14px;
 }
 .fml-name {
-  font-size: 10px; font-family: Consolas, 'Courier New', monospace;
-  text-transform: uppercase; letter-spacing: 1px;
-  color: #2563bc; margin-bottom: 6px;
+font-size: 10px; font-family: Consolas, ‘Courier New’, monospace;
+text-transform: uppercase; letter-spacing: 1px; color: #2563bc; margin-bottom: 5px;
 }
-.fml-eq {
-  font-size: 12px; font-family: Consolas, 'Courier New', monospace;
-  color: #1a1916; margin-bottom: 5px;
-  line-height: 1.5;
-}
-.fml-desc { font-size: 11px; color: #7a7870; line-height: 1.6; margin-bottom: 6px; }
+.fml-eq { font-size: 12px; font-family: Consolas, ‘Courier New’, monospace; color: #1a1916; margin-bottom: 4px; line-height: 1.5; }
+.fml-desc { font-size: 11px; color: #7a7870; line-height: 1.6; }
 .fml-live {
-  font-size: 11px; font-family: Consolas, 'Courier New', monospace;
-  background: #d6f0e0;
-  color: #1a6b3c;
-  padding: 4px 8px; border-radius: 4px;
-  margin-top: 6px;
+font-size: 11px; font-family: Consolas, ‘Courier New’, monospace;
+background: #d6f0e0; color: #1a6b3c;
+padding: 4px 8px; border-radius: 4px; margin-top: 6px; display: block;
 }
 
-/* ── LEADERSHIP VIEW ── */
-.leadership-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-bottom: 20px;
-}
+/* LEADERSHIP */
+.leadership-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
 .dept-card {
-  background: #ffffff;
-  border: 1px solid #e2e0db;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
-  cursor: pointer;
-  transition: all 0.15s;
-  animation: fadeUp 0.3s ease both;
+background: #ffffff; border: 1px solid #e2e0db;
+border-radius: 12px; overflow: hidden;
+box-shadow: 0 2px 8px #0a4a4a; cursor: pointer; transition: all 0.15s;
 }
-.dept-card:hover { border-color: #2563bc; box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06); transform: translateY(-1px); }
-.dept-card-top {
-  padding: 14px 16px 10px;
-  border-bottom: 3px solid;
-}
+.dept-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px #0a4a4a; }
+.dept-card-top { padding: 13px 15px 9px; border-bottom: 3px solid; }
 .dept-card.ok .dept-card-top { border-color: #2d9d5c; }
 .dept-card.warn .dept-card-top { border-color: #d4900a; }
 .dept-card.over .dept-card-top { border-color: #c0392b; }
 .dept-card-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-.dept-card-type { font-size: 10px; font-family: Consolas, 'Courier New', monospace; color: #a8a59f; }
-.dept-card-bottom { padding: 10px 16px 14px; }
-.dept-card-util {
-  font-size: 22px; font-family: Consolas, 'Courier New', monospace;
-  font-weight: 500; letter-spacing: -1px;
-}
+.dept-card-type { font-size: 10px; font-family: Consolas, ‘Courier New’, monospace; color: #a8a59f; }
+.dept-card-bottom { padding: 10px 15px 13px; }
+.dept-card-util { font-size: 22px; font-family: Consolas, ‘Courier New’, monospace; font-weight: 600; letter-spacing: -1px; }
 .dept-card.ok .dept-card-util { color: #1a6b3c; }
 .dept-card.warn .dept-card-util { color: #8a6200; }
 .dept-card.over .dept-card-util { color: #8b1a1a; }
-.dept-card-detail { font-size: 11px; color: #a8a59f; font-family: Consolas, 'Courier New', monospace; margin-top: 2px; }
-.dept-card-status {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 11px; margin-top: 8px;
-  font-family: Consolas, 'Courier New', monospace;
-}
-.status-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-}
+.dept-card-detail { font-size: 11px; color: #a8a59f; font-family: Consolas, ‘Courier New’, monospace; margin-top: 2px; }
+.dept-card-status { display: flex; align-items: center; gap: 5px; font-size: 11px; margin-top: 7px; font-family: Consolas, ‘Courier New’, monospace; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; }
 .status-dot.ok { background: #2d9d5c; }
 .status-dot.warn { background: #d4900a; }
 .status-dot.over { background: #c0392b; }
 
-/* ── ADMIN PANEL ── */
-.admin-wrap { max-width: 760px; margin: 0 auto; padding: 28px; }
-.admin-header { margin-bottom: 28px; }
-.admin-title { font-family: Georgia, 'Times New Roman', serif; font-size: 26px; margin-bottom: 6px; }
-.admin-sub { font-size: 13px; color: #7a7870; line-height: 1.6; }
+/* LEADERSHIP HEADER */
+.ldr-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px; }
+.ldr-title { font-family: Georgia, serif; font-size: 26px; letter-spacing: -0.3px; color: #ffffff; text-shadow: 0 1px 4px #0a4a4a; }
+.ldr-sub { font-size: 13px; color: #c0e8e8; margin-top: 4px; }
+.summary-chips { display: flex; gap: 8px; }
+.summary-chip { padding: 8px 14px; border-radius: 8px; font-size: 12px; font-family: Consolas, ‘Courier New’, monospace; border: 2px solid; text-align: center; }
+.chip-green { background: #d6f0e0; color: #1a6b3c; border-color: #6dcc99; }
+.chip-yellow { background: #fef3cd; color: #8a6200; border-color: #e8c84a; }
+.chip-red { background: #fde8e8; color: #8b1a1a; border-color: #e88080; }
+.chip-num { font-size: 20px; font-weight: 600; display: block; }
 
+.filter-bar { display: flex; gap: 7px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+.filter-btn {
+font-size: 11px; font-family: Consolas, ‘Courier New’, monospace;
+padding: 5px 12px; border-radius: 20px; border: 1px solid #d0cdc6;
+background: #ffffff; color: #7a7870; cursor: pointer;
+}
+.filter-btn.active { background: #1a3a6b; color: #ffffff; border-color: #1a3a6b; }
+.search-input {
+flex: 1; max-width: 200px; background: #ffffff; border: 1px solid #d0cdc6;
+border-radius: 20px; padding: 5px 14px;
+font-family: Consolas, ‘Courier New’, monospace; font-size: 12px; color: #1a1916; outline: none;
+}
+
+/* URL BANNER */
+.url-banner {
+background: #e8f0fd; border: 1px solid #c0d4f5; border-radius: 8px;
+padding: 9px 14px; margin-bottom: 16px;
+display: flex; align-items: center; gap: 9px;
+font-size: 12px; color: #1a3a6b; flex-wrap: wrap;
+}
+.url-code {
+font-family: Consolas, ‘Courier New’, monospace;
+background: #dce8fb; padding: 2px 8px; border-radius: 4px; font-size: 11px;
+}
+
+/* ADMIN */
+.admin-wrap { max-width: 760px; margin: 0 auto; padding: 24px; }
+.admin-header { margin-bottom: 24px; }
+.admin-title { font-family: Georgia, serif; font-size: 24px; margin-bottom: 6px; color: #ffffff; text-shadow: 0 1px 4px #0a4a4a; }
+.admin-sub { font-size: 13px; color: #c0e8e8; line-height: 1.6; }
 .admin-section {
-  background: #ffffff;
-  border: 1px solid #e2e0db;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
-  margin-bottom: 20px;
+background: #ffffff; border: 1px solid #e2e0db;
+border-radius: 12px; overflow: hidden;
+box-shadow: 0 2px 8px #0a4a4a; margin-bottom: 16px;
 }
-.admin-section-header {
-  padding: 14px 20px;
-  background: #fafaf8;
-  border-bottom: 1px solid #e2e0db;
-  font-size: 12px; font-weight: 600;
-}
-.admin-section-body { padding: 20px; }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.admin-section-header { padding: 13px 18px; background: #f5fafa; border-bottom: 1px solid #e2e0db; font-size: 12px; font-weight: 600; }
+.admin-section-body { padding: 18px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .form-group { display: flex; flex-direction: column; gap: 5px; }
 .form-group.full { grid-column: span 2; }
-.form-label {
-  font-size: 11px; font-family: Consolas, 'Courier New', monospace;
-  text-transform: uppercase; letter-spacing: 0.8px;
-  color: #7a7870;
-}
+.form-label { font-size: 11px; font-family: Consolas, ‘Courier New’, monospace; text-transform: uppercase; letter-spacing: 0.8px; color: #7a7870; }
 .form-input, .form-select {
-  background: #f4f3f0;
-  border: 1px solid #d0cdc6;
-  border-radius: 6px;
-  padding: 9px 12px;
-  color: #1a1916;
-  font-family: Consolas, 'Courier New', monospace;
-  font-size: 13px;
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  width: 100%;
+background: #f5fafa; border: 1px solid #d0cdc6; border-radius: 6px;
+padding: 8px 11px; color: #1a1916;
+font-family: Consolas, ‘Courier New’, monospace; font-size: 13px; outline: none; width: 100%;
 }
-.form-input:focus, .form-select:focus {
-  border-color: #2563bc;
-  box-shadow: 0 0 0 3px rgba(37,99,188,0.08);
-}
-.form-hint { font-size: 10px; color: #a8a59f; font-family: Consolas, 'Courier New', monospace; }
-
+.form-input:focus, .form-select:focus { border-color: #2563bc; }
+.form-hint { font-size: 10px; color: #a8a59f; font-family: Consolas, ‘Courier New’, monospace; }
 .btn-primary {
-  background: #1a3a6b;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 22px;
-  font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.15s;
+background: #1a3a6b; color: #ffffff; border: none; border-radius: 6px;
+padding: 9px 20px; font-family: ‘Segoe UI’, sans-serif; font-size: 13px; font-weight: 600; cursor: pointer;
 }
-.btn-primary:hover { opacity: 0.88; }
 .btn-secondary {
-  background: #fafaf8;
-  color: #1a1916;
-  border: 1px solid #d0cdc6;
-  border-radius: 6px;
-  padding: 10px 22px;
-  font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
+background: #f5fafa; color: #1a1916; border: 1px solid #d0cdc6;
+border-radius: 6px; padding: 9px 20px;
+font-family: ‘Segoe UI’, sans-serif; font-size: 13px; font-weight: 500; cursor: pointer;
 }
-.btn-secondary:hover { background: #f4f3f0; }
-.btn-row { display: flex; gap: 10px; margin-top: 16px; align-items: center; }
-
+.btn-row { display: flex; gap: 10px; margin-top: 14px; align-items: center; }
 .dept-list-table { width: 100%; border-collapse: collapse; }
-.dept-list-table th {
-  text-align: left;
-  font-size: 10px; font-family: Consolas, 'Courier New', monospace;
-  text-transform: uppercase; letter-spacing: 1px;
-  color: #7a7870; padding: 8px 12px;
-  border-bottom: 1px solid #e2e0db;
-}
-.dept-list-table td {
-  padding: 10px 12px;
-  border-bottom: 1px solid #e2e0db;
-  font-size: 12px; font-family: Consolas, 'Courier New', monospace;
-}
+.dept-list-table th { text-align: left; font-size: 10px; font-family: Consolas, ‘Courier New’, monospace; text-transform: uppercase; letter-spacing: 1px; color: #7a7870; padding: 8px 12px; border-bottom: 1px solid #e2e0db; }
+.dept-list-table td { padding: 9px 12px; border-bottom: 1px solid #e2e0db; font-size: 12px; font-family: Consolas, ‘Courier New’, monospace; }
 .dept-list-table tr:last-child td { border-bottom: none; }
-.dept-list-table tr:hover td { background: #fafaf8; }
 .tbl-status { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 
 .save-toast {
-  position: fixed; bottom: 28px; right: 28px;
-  background: #1a6b3c; color: white;
-  padding: 12px 20px; border-radius: 8px;
-  font-size: 13px; font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06);
-  transform: translateY(80px); opacity: 0;
-  transition: all 0.3s cubic-bezier(.4,0,.2,1);
-  z-index: 999;
+position: fixed; bottom: 24px; right: 24px; background: #1a6b3c; color: #ffffff;
+padding: 11px 18px; border-radius: 8px; font-size: 13px;
+box-shadow: 0 4px 16px #0a4a4a;
+transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 999;
 }
 .save-toast.show { transform: translateY(0); opacity: 1; }
 
-/* ── URL BANNER ── */
-.url-banner {
-  background: #e8f0fd;
-  border: 1px solid #c0d4f5;
-  border-radius: 8px;
-  padding: 10px 16px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  color: #1a3a6b;
+/* SP NOTE */
+.sp-note {
+background: #e8f0fd; border: 1px solid #c0d4f5; border-radius: 10px;
+padding: 14px 18px; font-size: 12px; color: #1a3a6b; line-height: 1.7;
 }
-.url-code {
-  font-family: Consolas, 'Courier New', monospace;
-  background: rgba(37,99,188,0.1);
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 11px;
+.sp-note code {
+font-family: Consolas, ‘Courier New’, monospace; font-size: 11px;
+background: #dce8fb; padding: 1px 6px; border-radius: 3px;
 }
 
-/* ── LEADERSHIP HEADER ── */
-.ldr-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 20px;
-}
-.ldr-title { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; letter-spacing: -0.3px; }
-.ldr-sub { font-size: 13px; color: #7a7870; margin-top: 4px; }
-.summary-chips { display: flex; gap: 10px; }
-.summary-chip {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-family: Consolas, 'Courier New', monospace;
-  border: 1px solid;
-  text-align: center;
-}
-.chip-green { background: #d6f0e0; color: #1a6b3c; border-color: #9ddbb8; }
-.chip-yellow { background: #fef3cd; color: #8a6200; border-color: #f0d080; }
-.chip-red { background: #fde8e8; color: #8b1a1a; border-color: #f0a0a0; }
-.chip-num { font-size: 20px; font-weight: 500; display: block; }
-
-.filter-bar {
-  display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
-  align-items: center;
-}
-.filter-btn {
-  font-size: 11px; font-family: Consolas, 'Courier New', monospace;
-  padding: 5px 12px; border-radius: 20px;
-  border: 1px solid #d0cdc6;
-  background: #ffffff; color: #7a7870;
-  cursor: pointer; transition: all 0.15s;
-}
-.filter-btn:hover { border-color: #2563bc; color: #2563bc; }
-.filter-btn.active { background: #1a3a6b; color: white; border-color: #1a3a6b; }
-.search-input {
-  flex: 1; max-width: 220px;
-  background: #ffffff;
-  border: 1px solid #d0cdc6;
-  border-radius: 20px;
-  padding: 5px 14px;
-  font-family: Consolas, 'Courier New', monospace;
-  font-size: 12px;
-  color: #1a1916;
-  outline: none;
-}
-.search-input:focus { border-color: #2563bc; }
-
+/* MOBILE */
 @media (max-width: 768px) {
-  .main { padding: 16px; }
-  .kpi-row { grid-template-columns: repeat(2,1fr); }
-  .two-panel { grid-template-columns: 1fr; }
-  .leadership-grid { grid-template-columns: repeat(2,1fr); }
-  .formula-body.open { grid-template-columns: 1fr; }
-  .form-grid { grid-template-columns: 1fr; }
-  .form-group.full { grid-column: span 1; }
-  .ldr-header { flex-direction: column; gap: 16px; align-items: flex-start; }
-  .topbar { padding: 0 16px; }
-  .period-band { padding: 8px 16px; }
+.topbar { height: auto; flex-wrap: wrap; padding: 8px 12px; gap: 6px; }
+.topbar-divider { display: none; }
+.page-title { display: none; }
+.topbar-right { width: 100%; gap: 5px; flex-wrap: wrap; }
+.user-chip { flex: 1; }
+.nav-btn { font-size: 11px; padding: 4px 8px; }
+.period-band { padding: 6px 12px; flex-wrap: wrap; font-size: 11px; }
+.period-pill { display: none; }
+.main { padding: 12px; }
+.dept-name { font-size: 22px; }
+.dept-header { flex-direction: column; gap: 4px; }
+.last-updated { text-align: left; color: #c0e8e8; }
+.status-card { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px; }
+.status-right { display: flex; align-items: baseline; gap: 10px; }
+.status-big { font-size: 32px; }
+.kpi-row { grid-template-columns: repeat(2, 1fr); }
+.two-panel { grid-template-columns: 1fr; }
+.leadership-grid { grid-template-columns: repeat(2, 1fr); }
+.formula-body.open { grid-template-columns: 1fr; }
+.ldr-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+.summary-chips { flex-wrap: wrap; }
+.form-grid { grid-template-columns: 1fr; }
+.form-group.full { grid-column: span 1; }
+.progress-pcts { display: none; }
 }
 </style>
 
 </head>
 <body>
-
-<!-- ── TOPBAR ── -->
 
 <div class="topbar">
   <div class="topbar-left">
@@ -689,66 +451,58 @@ body {
   </div>
   <div class="topbar-right">
     <div class="user-chip">
-      <div class="user-avatar" id="avatarInitials">—</div>
+      <div class="user-avatar" id="avatarInitials">--</div>
       <span id="userDisplay">Loading...</span>
     </div>
-    <button class="nav-btn active" id="btnManager" onclick="switchView('manager')">My Department</button>
-    <button class="nav-btn" id="btnLeadership" onclick="switchView('leadership')">All Departments</button>
+    <button class="nav-btn active" id="btnManager" onclick="switchView('manager')">My Dept</button>
+    <button class="nav-btn" id="btnLeadership" onclick="switchView('leadership')">All Depts</button>
     <button class="nav-btn" id="btnAdmin" onclick="switchView('admin')">Admin</button>
   </div>
 </div>
 
-<!-- ── PERIOD BAND ── -->
-
 <div class="period-band">
-  <span>Pay Period: <strong id="periodLabel">—</strong></span>
-  <span id="periodDay">—</span>
-  <span class="period-pill" id="periodProgress">—</span>
+  <span>Pay Period: <strong id="periodLabel">--</strong></span>
+  <span id="periodDay">--</span>
+  <span class="period-pill" id="periodProgress">--</span>
 </div>
 
-<!-- ══════════════════════════════════
-     MANAGER VIEW
-══════════════════════════════════ -->
+<!-- MANAGER VIEW -->
 
 <div class="view active" id="view-manager">
   <div class="main">
+    <div class="url-banner" id="urlBanner">
+      <span>o</span>
+      <span>Linked from Compliance Tracker - showing your department automatically.</span>
+      <span class="url-code" id="urlParamDisplay">?dept=--</span>
+    </div>
+    <div class="dept-header">
+      <div>
+        <div class="dept-name" id="mgr-deptName">--</div>
+        <div class="dept-meta">
+          <span class="dept-tag" id="mgr-deptType">--</span>
+          <span class="dept-tag" id="mgr-costCenter">CC: --</span>
+          <span class="dept-tag" id="mgr-whu">WHpU: --</span>
+        </div>
+      </div>
+      <div class="last-updated">Last updated<br><span id="mgr-lastUpdated">--</span></div>
+    </div>
 
 ```
-<div class="url-banner" id="urlBanner">
-  <span>🔗</span>
-  <span>Linked from Compliance Tracker — showing your department automatically.</span>
-  <span class="url-code" id="urlParamDisplay">?dept=—</span>
-</div>
-
-<div class="dept-header">
-  <div>
-    <div class="dept-name" id="mgr-deptName">—</div>
-    <div class="dept-meta">
-      <span class="dept-tag" id="mgr-deptType">—</span>
-      <span class="dept-tag" id="mgr-costCenter">CC: —</span>
-      <span class="dept-tag" id="mgr-whu">WHpU: —</span>
-    </div>
-  </div>
-  <div class="last-updated">Last updated<br><span id="mgr-lastUpdated">—</span></div>
-</div>
-
-<!-- Status -->
 <div class="status-card ok" id="mgr-statusCard">
-  <div class="status-indicator" id="mgr-statusIcon">✓</div>
+  <div class="status-indicator" id="mgr-statusIcon">+</div>
   <div class="status-body">
-    <div class="status-headline" id="mgr-headline">—</div>
-    <div class="status-sub" id="mgr-sub">—</div>
+    <div class="status-headline" id="mgr-headline">--</div>
+    <div class="status-sub" id="mgr-sub">--</div>
   </div>
   <div class="status-right">
-    <div class="status-big" id="mgr-bigNum">—</div>
+    <div class="status-big" id="mgr-bigNum">--</div>
     <div class="status-big-label" id="mgr-bigLabel">FTE today</div>
   </div>
 </div>
 
-<!-- Progress -->
 <div class="progress-card">
   <div class="progress-top">
-    <div class="progress-label">Pay Period Progress — Hours</div>
+    <div class="progress-label">Pay Period Progress - Hours</div>
     <div class="progress-pcts">
       <div class="pct-item"><div class="pct-dot" style="background:#2563bc"></div> Expected pace</div>
       <div class="pct-item"><div class="pct-dot" style="background:#2d9d5c"></div> Actual used</div>
@@ -759,155 +513,64 @@ body {
     <div class="pace-line" id="mgr-paceLine" style="left:0%"></div>
   </div>
   <div class="day-ticks" id="mgr-dayTicks"></div>
-  <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;font-family:Consolas, 'Courier New', monospace;color:#a8a59f">
+  <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;font-family:Consolas,'Courier New',monospace;color:#a8a59f">
     <span>0 hrs</span>
-    <span id="mgr-progressMid">—</span>
-    <span id="mgr-budgetMax">—</span>
+    <span id="mgr-progressMid">--</span>
+    <span id="mgr-budgetMax">--</span>
   </div>
 </div>
 
-<!-- KPIs -->
 <div class="kpi-row">
-  <div class="kpi">
-    <div class="kpi-label">FTE Budget</div>
-    <div class="kpi-val val-blue" id="k-budget">—</div>
-    <div class="kpi-sub">total hrs / period</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">Hours Used</div>
-    <div class="kpi-val" id="k-actual">—</div>
-    <div class="kpi-sub" id="k-actual-sub">—</div>
-    <div class="kpi-badge badge-blue" id="k-actual-badge">—</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">Remaining</div>
-    <div class="kpi-val val-blue" id="k-remaining">—</div>
-    <div class="kpi-sub" id="k-remaining-sub">—</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">Daily Utilization</div>
-    <div class="kpi-val" id="k-util">—</div>
-    <div class="kpi-sub">today vs. ceiling</div>
-    <div class="kpi-badge" id="k-util-badge">—</div>
-  </div>
+  <div class="kpi"><div class="kpi-label">FTE Budget</div><div class="kpi-val val-blue" id="k-budget">--</div><div class="kpi-sub">total hrs / period</div></div>
+  <div class="kpi"><div class="kpi-label">Hours Used</div><div class="kpi-val" id="k-actual">--</div><div class="kpi-sub" id="k-actual-sub">--</div><div class="kpi-badge badge-blue" id="k-actual-badge">--</div></div>
+  <div class="kpi"><div class="kpi-label">Remaining</div><div class="kpi-val val-blue" id="k-remaining">--</div><div class="kpi-sub" id="k-remaining-sub">--</div></div>
+  <div class="kpi"><div class="kpi-label">Daily Utilization</div><div class="kpi-val" id="k-util">--</div><div class="kpi-sub">today vs. ceiling</div><div class="kpi-badge" id="k-util-badge">--</div></div>
 </div>
 
-<!-- Today / Tomorrow -->
 <div class="two-panel">
   <div class="panel">
     <div class="panel-header">
-      <div>
-        <div class="panel-title">Today — Day <span id="mgr-todayDay">—</span> of 14</div>
-        <div class="panel-subtitle">What you're working with right now</div>
-      </div>
-      <span class="panel-badge badge-now">⬤ Current</span>
+      <div><div class="panel-title">Today - Day <span id="mgr-todayDay">--</span> of 14</div><div class="panel-subtitle">What you are working with right now</div></div>
+      <span class="panel-badge badge-now">Current</span>
     </div>
     <div class="panel-body">
-      <div class="panel-row">
-        <span class="panel-row-label">Your daily ceiling (max)</span>
-        <span class="panel-row-val val-green" id="f-ceiling">—</span>
-      </div>
-      <div class="panel-row">
-        <span class="panel-row-label">Actual hours worked</span>
-        <span class="panel-row-val" id="f-actual">—</span>
-      </div>
-      <div class="panel-row">
-        <span class="panel-row-label">Over / Under ceiling</span>
-        <span class="panel-row-val" id="f-delta">—</span>
-      </div>
-      <div class="panel-row">
-        <span class="panel-row-label">Utilization</span>
-        <span class="panel-row-val" id="f-util">—</span>
-      </div>
-      <div class="panel-row">
-        <span class="panel-row-label">Productive vs. Non-productive</span>
-        <span class="panel-row-val val-muted" id="f-prodSplit">—</span>
-      </div>
+      <div class="panel-row"><span class="panel-row-label">Your daily ceiling (max)</span><span class="panel-row-val val-green" id="f-ceiling">--</span></div>
+      <div class="panel-row"><span class="panel-row-label">Actual hours worked</span><span class="panel-row-val" id="f-actual">--</span></div>
+      <div class="panel-row"><span class="panel-row-label">Over / Under ceiling</span><span class="panel-row-val" id="f-delta">--</span></div>
+      <div class="panel-row"><span class="panel-row-label">Utilization</span><span class="panel-row-val" id="f-util">--</span></div>
+      <div class="panel-row"><span class="panel-row-label">Productive / Non-productive</span><span class="panel-row-val val-muted" id="f-prodSplit">--</span></div>
     </div>
   </div>
-
   <div class="panel">
     <div class="panel-header">
-      <div>
-        <div class="panel-title">Tomorrow — Day <span id="mgr-tomorrowDay">—</span> of 14</div>
-        <div class="panel-subtitle">Plan ahead to stay on track</div>
-      </div>
+      <div><div class="panel-title">Tomorrow - Day <span id="mgr-tomorrowDay">--</span> of 14</div><div class="panel-subtitle">Plan ahead to stay on track</div></div>
       <span class="panel-badge badge-plan">Planning</span>
     </div>
     <div class="panel-body">
-      <div class="panel-row">
-        <span class="panel-row-label">FTE target</span>
-        <span class="panel-row-val val-blue" id="f-fteTomorrow">—</span>
-      </div>
-      <div class="panel-row">
-        <span class="panel-row-label">Allowed hours (avg)</span>
-        <span class="panel-row-val val-green" id="f-allowedTomorrow">—</span>
-      </div>
-      <div class="panel-row">
-        <span class="panel-row-label">Remaining days after today</span>
-        <span class="panel-row-val" id="f-remDays">—</span>
-      </div>
-      <div class="panel-row">
-        <span class="panel-row-label">Avg hrs/day to finish on budget</span>
-        <span class="panel-row-val val-blue" id="f-avgNeeded">—</span>
-      </div>
-      <div class="panel-row">
-        <span class="panel-row-label">Budget cushion remaining</span>
-        <span class="panel-row-val" id="f-cushion">—</span>
-      </div>
+      <div class="panel-row"><span class="panel-row-label">FTE target</span><span class="panel-row-val val-blue" id="f-fteTomorrow">--</span></div>
+      <div class="panel-row"><span class="panel-row-label">Allowed hours (avg)</span><span class="panel-row-val val-green" id="f-allowedTomorrow">--</span></div>
+      <div class="panel-row"><span class="panel-row-label">Remaining days after today</span><span class="panel-row-val" id="f-remDays">--</span></div>
+      <div class="panel-row"><span class="panel-row-label">Avg hrs/day to finish on budget</span><span class="panel-row-val val-blue" id="f-avgNeeded">--</span></div>
+      <div class="panel-row"><span class="panel-row-label">Budget cushion remaining</span><span class="panel-row-val" id="f-cushion">--</span></div>
     </div>
   </div>
 </div>
 
-<!-- Formula breakdown -->
 <div class="formula-section">
   <div class="formula-toggle" id="formulaToggle" onclick="toggleFormula()">
     <div class="formula-toggle-left">
-      <span>📐</span>
-      <div>
-        <div class="formula-toggle-title">How These Numbers Are Calculated</div>
-        <div class="formula-toggle-sub">Formula reference — for managers & back-end staff</div>
-      </div>
+      <span>Formulas</span>
+      <div><div class="formula-toggle-title">How These Numbers Are Calculated</div><div class="formula-toggle-sub">Reference for managers and back-end staff</div></div>
     </div>
-    <button class="formula-toggle-btn" id="formulaBtn">Show ▾</button>
+    <button class="formula-toggle-btn" id="formulaBtn">Show</button>
   </div>
   <div class="formula-body" id="formulaBody">
-    <div class="fml-card">
-      <div class="fml-name">Daily Ceiling (Allowed Max)</div>
-      <div class="fml-eq">(Budget − Prior Days' Actuals) ÷ Days Remaining incl. Today</div>
-      <div class="fml-desc">What you're allowed to spend today. Resets each morning based on how prior days went.</div>
-      <div class="fml-live" id="fml-ceiling">—</div>
-    </div>
-    <div class="fml-card">
-      <div class="fml-name">Over / Under Today</div>
-      <div class="fml-eq">Today's Actual Hours − Daily Ceiling</div>
-      <div class="fml-desc">Positive = over your ceiling (compresses future days). Negative = you have buffer.</div>
-      <div class="fml-live" id="fml-delta">—</div>
-    </div>
-    <div class="fml-card">
-      <div class="fml-name">Allowed Tomorrow (Avg)</div>
-      <div class="fml-eq">(Budget − All Actuals Through Today) ÷ Days After Today</div>
-      <div class="fml-desc">Once today locks in, this spreads the remaining budget across future days only.</div>
-      <div class="fml-live" id="fml-tomorrow">—</div>
-    </div>
-    <div class="fml-card">
-      <div class="fml-name">FTE Tomorrow</div>
-      <div class="fml-eq">Allowed Tomorrow ÷ Hrs Per Shift (<span id="fml-shiftHrs">12</span>)</div>
-      <div class="fml-desc">Translates tomorrow's hour ceiling into an FTE headcount target for scheduling.</div>
-      <div class="fml-live" id="fml-fte">—</div>
-    </div>
-    <div class="fml-card">
-      <div class="fml-name">Daily Utilization %</div>
-      <div class="fml-eq">(Today's Actual ÷ Daily Ceiling) × 100</div>
-      <div class="fml-desc">100% = exactly on pace. Over 100% = compressing future budget. Under = earning buffer.</div>
-      <div class="fml-live" id="fml-util">—</div>
-    </div>
-    <div class="fml-card">
-      <div class="fml-name">Alert Thresholds</div>
-      <div class="fml-eq">Green ≤100% · Yellow 101–110% · Red >110%</div>
-      <div class="fml-desc">Applied to daily utilization. Red = immediate staffing review required before next shift.</div>
-      <div class="fml-live" id="fml-alert">—</div>
-    </div>
+    <div class="fml-card"><div class="fml-name">Daily Ceiling</div><div class="fml-eq">(Budget - Prior Days) / Days Remaining incl. Today</div><div class="fml-desc">Resets each morning based on prior days.</div><span class="fml-live" id="fml-ceiling">--</span></div>
+    <div class="fml-card"><div class="fml-name">Over / Under Today</div><div class="fml-eq">Actual Hours - Daily Ceiling</div><div class="fml-desc">Positive = over ceiling. Negative = buffer earned.</div><span class="fml-live" id="fml-delta">--</span></div>
+    <div class="fml-card"><div class="fml-name">Allowed Tomorrow</div><div class="fml-eq">(Budget - All Actuals Through Today) / Days After Today</div><div class="fml-desc">Spreads remaining budget across future days only.</div><span class="fml-live" id="fml-tomorrow">--</span></div>
+    <div class="fml-card"><div class="fml-name">FTE Tomorrow</div><div class="fml-eq">Allowed Tomorrow / Hrs Per Shift (<span id="fml-shiftHrs">12</span>)</div><div class="fml-desc">Hour ceiling converted to headcount target.</div><span class="fml-live" id="fml-fte">--</span></div>
+    <div class="fml-card"><div class="fml-name">Daily Utilization %</div><div class="fml-eq">(Actual / Ceiling) x 100</div><div class="fml-desc">100% = on pace. Over 100% = compressing future budget.</div><span class="fml-live" id="fml-util">--</span></div>
+    <div class="fml-card"><div class="fml-name">Alert Thresholds</div><div class="fml-eq">Green 100% or under  |  Yellow 101-110%  |  Red over 110%</div><div class="fml-desc">Red = staffing review required before next shift.</div><span class="fml-live" id="fml-alert">--</span></div>
   </div>
 </div>
 ```
@@ -915,555 +578,371 @@ body {
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     LEADERSHIP VIEW
-══════════════════════════════════ -->
+<!-- LEADERSHIP VIEW -->
 
 <div class="view" id="view-leadership">
   <div class="main">
     <div class="ldr-header">
-      <div>
-        <div class="ldr-title">All Departments</div>
-        <div class="ldr-sub">Pay period snapshot — click any department for detail</div>
-      </div>
+      <div><div class="ldr-title">All Departments</div><div class="ldr-sub">Pay period snapshot - click any department for detail</div></div>
       <div class="summary-chips">
-        <div class="summary-chip chip-green">
-          <span class="chip-num" id="ldr-countGreen">—</span>On Budget
-        </div>
-        <div class="summary-chip chip-yellow">
-          <span class="chip-num" id="ldr-countYellow">—</span>Watch
-        </div>
-        <div class="summary-chip chip-red">
-          <span class="chip-num" id="ldr-countRed">—</span>Over
-        </div>
+        <div class="summary-chip chip-green"><span class="chip-num" id="ldr-countGreen">--</span>On Budget</div>
+        <div class="summary-chip chip-yellow"><span class="chip-num" id="ldr-countYellow">--</span>Watch</div>
+        <div class="summary-chip chip-red"><span class="chip-num" id="ldr-countRed">--</span>Over</div>
       </div>
     </div>
-
-```
-<div class="filter-bar">
-  <button class="filter-btn active" onclick="filterDepts('all', this)">All</button>
-  <button class="filter-btn" onclick="filterDepts('ok', this)">On Budget</button>
-  <button class="filter-btn" onclick="filterDepts('warn', this)">Watch</button>
-  <button class="filter-btn" onclick="filterDepts('over', this)">Over</button>
-  <button class="filter-btn" onclick="filterDepts('fixed', this)">Fixed</button>
-  <button class="filter-btn" onclick="filterDepts('variable', this)">Variable</button>
-  <input class="search-input" placeholder="Search department..." oninput="searchDepts(this.value)" />
-</div>
-
-<div class="leadership-grid" id="leadershipGrid">
-  <!-- populated by JS -->
-</div>
-```
-
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterDepts('all',this)">All</button>
+      <button class="filter-btn" onclick="filterDepts('ok',this)">On Budget</button>
+      <button class="filter-btn" onclick="filterDepts('warn',this)">Watch</button>
+      <button class="filter-btn" onclick="filterDepts('over',this)">Over</button>
+      <button class="filter-btn" onclick="filterDepts('fixed',this)">Fixed</button>
+      <button class="filter-btn" onclick="filterDepts('variable',this)">Variable</button>
+      <input class="search-input" placeholder="Search..." oninput="searchDepts(this.value)" />
+    </div>
+    <div class="leadership-grid" id="leadershipGrid"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     ADMIN VIEW
-══════════════════════════════════ -->
+<!-- ADMIN VIEW -->
 
 <div class="view" id="view-admin">
   <div class="admin-wrap">
     <div class="admin-header">
       <div class="admin-title">Daily Data Entry</div>
-      <div class="admin-sub">Enter today's figures from the UKG report. This updates all department views immediately. Once SharePoint automation is live, this panel is replaced by the Power Automate flow.</div>
+      <div class="admin-sub">Enter today's figures from the UKG report. Once SharePoint automation is live, this panel is replaced by the Power Automate flow.</div>
     </div>
-
-```
-<!-- Daily update form -->
-<div class="admin-section">
-  <div class="admin-section-header">Update Department — Today's Hours</div>
-  <div class="admin-section-body">
-    <div class="form-grid">
-      <div class="form-group">
-        <label class="form-label">Department</label>
-        <select class="form-select" id="admin-deptSelect" onchange="loadAdminDept()">
-          <!-- populated by JS -->
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Day # (1–14)</label>
-        <input class="form-input" type="number" id="admin-day" min="1" max="14" value="1" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Actual Hours Worked (today)</label>
-        <input class="form-input" type="number" id="admin-todayHrs" placeholder="e.g. 178.6" step="0.1" />
-        <span class="form-hint">Productive + Non-productive combined</span>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Rolling Actual (cumulative)</label>
-        <input class="form-input" type="number" id="admin-rollingActual" placeholder="e.g. 356.2" step="0.1" />
-        <span class="form-hint">Sum of all days including today</span>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Productive Hours</label>
-        <input class="form-input" type="number" id="admin-productive" placeholder="e.g. 155.0" step="0.1" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Non-Productive Hours</label>
-        <input class="form-input" type="number" id="admin-nonProductive" placeholder="e.g. 23.6" step="0.1" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Actual UOS</label>
-        <input class="form-input" type="number" id="admin-uos" placeholder="e.g. 42" step="1" />
-        <span class="form-hint">Units of service — from biweekly report</span>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Pay Period Start Date</label>
-        <input class="form-input" type="date" id="admin-periodStart" />
+    <div class="admin-section">
+      <div class="admin-section-header">Update Department - Today's Hours</div>
+      <div class="admin-section-body">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Department</label><select class="form-select" id="admin-deptSelect" onchange="loadAdminDept()"></select></div>
+          <div class="form-group"><label class="form-label">Day # (1-14)</label><input class="form-input" type="number" id="admin-day" min="1" max="14" value="1" /></div>
+          <div class="form-group"><label class="form-label">Actual Hours (today)</label><input class="form-input" type="number" id="admin-todayHrs" placeholder="e.g. 178.6" step="0.1" /><span class="form-hint">Productive + Non-productive</span></div>
+          <div class="form-group"><label class="form-label">Rolling Actual (cumulative)</label><input class="form-input" type="number" id="admin-rollingActual" placeholder="e.g. 356.2" step="0.1" /><span class="form-hint">Sum of all days including today</span></div>
+          <div class="form-group"><label class="form-label">Productive Hours</label><input class="form-input" type="number" id="admin-productive" placeholder="e.g. 155.0" step="0.1" /></div>
+          <div class="form-group"><label class="form-label">Non-Productive Hours</label><input class="form-input" type="number" id="admin-nonProductive" placeholder="e.g. 23.6" step="0.1" /></div>
+          <div class="form-group"><label class="form-label">Actual UOS</label><input class="form-input" type="number" id="admin-uos" placeholder="e.g. 42" step="1" /></div>
+          <div class="form-group"><label class="form-label">Pay Period Start Date</label><input class="form-input" type="date" id="admin-periodStart" /></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-primary" onclick="saveAdminEntry()">Save and Update</button>
+          <button class="btn-secondary" onclick="clearAdminForm()">Clear</button>
+          <span style="font-size:11px;color:#a8a59f;font-family:Consolas,'Courier New',monospace;margin-left:auto" id="admin-saveNote">No unsaved changes</span>
+        </div>
       </div>
     </div>
-    <div class="btn-row">
-      <button class="btn-primary" onclick="saveAdminEntry()">Save & Update</button>
-      <button class="btn-secondary" onclick="clearAdminForm()">Clear</button>
-      <span style="font-size:11px;color:#a8a59f;font-family:Consolas, 'Courier New', monospace;margin-left:auto" id="admin-saveNote">No unsaved changes</span>
+    <div class="admin-section">
+      <div class="admin-section-header">Department Reference - Budget Configuration</div>
+      <div class="admin-section-body" style="padding:0">
+        <table class="dept-list-table">
+          <thead><tr><th>Status</th><th>Department</th><th>Type</th><th>Cost Center</th><th>Budget Hrs</th><th>WHpU</th><th>Utilization</th></tr></thead>
+          <tbody id="admin-deptTable"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sp-note">
+      <strong>Phase 2 - Power Automate Integration</strong><br>
+      Power Automate watches a SharePoint document library for the daily UKG export CSV. Flow aggregates by department and writes to a SharePoint List. This admin panel is retired automatically. The tracker reads from <code>/_api/web/lists/getbytitle('FTEData')/items</code>.
     </div>
   </div>
 </div>
 
-<!-- Department master list -->
-<div class="admin-section">
-  <div class="admin-section-header">Department Reference — Budget Configuration</div>
-  <div class="admin-section-body" style="padding:0">
-    <table class="dept-list-table">
-      <thead>
-        <tr>
-          <th>Status</th>
-          <th>Department</th>
-          <th>Type</th>
-          <th>Cost Center</th>
-          <th>Budget Hrs</th>
-          <th>WHpU</th>
-          <th>Utilization</th>
-        </tr>
-      </thead>
-      <tbody id="admin-deptTable">
-        <!-- populated by JS -->
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- SharePoint note -->
-<div style="background:#e8f0fd;border:1px solid #c0d4f5;border-radius:10px;padding:16px 20px;font-size:12px;color:#1a3a6b;line-height:1.7">
-  <strong>Phase 2 — Power Automate Integration</strong><br>
-  When ready: Power Automate watches a SharePoint document library for the daily UKG export CSV. Flow reads each department row, calculates rolling actual, and writes to a SharePoint List. This admin panel is replaced automatically — no code changes needed to this HTML file. The tracker reads from <span style="font-family:Consolas, 'Courier New', monospace;font-size:11px;background:rgba(37,99,188,0.1);padding:1px 6px;border-radius:3px">/_api/web/lists/getbytitle('FTEData')/items</span> instead of local storage.
-</div>
-```
-
-  </div>
-</div>
-
-<!-- Toast -->
-
-<div class="save-toast" id="saveToast">✓ Department updated</div>
+<div class="save-toast" id="saveToast">Department updated</div>
 
 <script>
-// ══════════════════════════════════════
-// SAMPLE DATA — mirrors Excel structure
-// In Phase 2 this comes from SharePoint List REST API
-// ══════════════════════════════════════
 const DEPARTMENTS = [
   { id: 'CC4210', name: 'Med/Surg Unit 4B',       type: 'fixed',    budgetHrs: 2500, whu: 6.2  },
   { id: 'CC4215', name: 'Med/Surg Unit 5A',       type: 'fixed',    budgetHrs: 2380, whu: 6.2  },
-  { id: 'CC3110', name: 'ICU — Critical Care',    type: 'fixed',    budgetHrs: 3200, whu: 24.0 },
+  { id: 'CC3110', name: 'ICU - Critical Care',    type: 'fixed',    budgetHrs: 3200, whu: 24.0 },
   { id: 'CC3120', name: 'Cardiac Step-Down',      type: 'fixed',    budgetHrs: 2800, whu: 12.0 },
   { id: 'CC2050', name: 'Emergency Department',   type: 'variable', budgetHrs: 4100, whu: 2.8  },
   { id: 'CC2055', name: 'ED Fast Track',          type: 'variable', budgetHrs: 1200, whu: 1.4  },
   { id: 'CC6010', name: 'Surgical Services',      type: 'variable', budgetHrs: 3600, whu: 18.5 },
   { id: 'CC6015', name: 'Post-Anesthesia (PACU)', type: 'fixed',    budgetHrs: 1800, whu: 9.2  },
-  { id: 'CC7020', name: 'Labor & Delivery',       type: 'fixed',    budgetHrs: 2950, whu: 28.0 },
+  { id: 'CC7020', name: 'Labor and Delivery',     type: 'fixed',    budgetHrs: 2950, whu: 28.0 },
   { id: 'CC7025', name: 'Mother/Baby Unit',       type: 'fixed',    budgetHrs: 2100, whu: 14.0 },
   { id: 'CC8010', name: 'Behavioral Health',      type: 'fixed',    budgetHrs: 1950, whu: 8.0  },
   { id: 'CC9001', name: 'Pharmacy',               type: 'variable', budgetHrs: 1400, whu: 0.0  },
 ];
 
-// Daily data — in Phase 2 this is fetched from SharePoint List
-// Structure mirrors her Excel: rollingActual = cumulative, todayHrs = today only
 let DAILY_DATA = {
-  'CC4210': { day: 2, rollingActual: 368.6, todayHrs: 190.0, productive: 168.0, nonProductive: 22.0, uos: 44, periodStart: '2026-03-24' },
-  'CC4215': { day: 2, rollingActual: 340.2, todayHrs: 172.0, productive: 155.0, nonProductive: 17.0, uos: 40, periodStart: '2026-03-24' },
-  'CC3110': { day: 2, rollingActual: 490.0, todayHrs: 252.0, productive: 240.0, nonProductive: 12.0, uos: 12, periodStart: '2026-03-24' },
-  'CC3120': { day: 2, rollingActual: 388.0, todayHrs: 200.0, productive: 184.0, nonProductive: 16.0, uos: 18, periodStart: '2026-03-24' },
-  'CC2050': { day: 2, rollingActual: 610.0, todayHrs: 295.0, productive: 270.0, nonProductive: 25.0, uos: 110, periodStart: '2026-03-24' },
-  'CC2055': { day: 2, rollingActual: 162.0, todayHrs: 84.0,  productive: 76.0,  nonProductive: 8.0,  uos: 58,  periodStart: '2026-03-24' },
-  'CC6010': { day: 2, rollingActual: 558.0, todayHrs: 270.0, productive: 252.0, nonProductive: 18.0, uos: 16, periodStart: '2026-03-24' },
-  'CC6015': { day: 2, rollingActual: 248.0, todayHrs: 132.0, productive: 120.0, nonProductive: 12.0, uos: 14, periodStart: '2026-03-24' },
-  'CC7020': { day: 2, rollingActual: 430.0, todayHrs: 216.0, productive: 200.0, nonProductive: 16.0, uos: 8,  periodStart: '2026-03-24' },
-  'CC7025': { day: 2, rollingActual: 295.0, todayHrs: 152.0, productive: 140.0, nonProductive: 12.0, uos: 22, periodStart: '2026-03-24' },
-  'CC8010': { day: 2, rollingActual: 280.0, todayHrs: 144.0, productive: 132.0, nonProductive: 12.0, uos: 18, periodStart: '2026-03-24' },
-  'CC9001': { day: 2, rollingActual: 198.0, todayHrs: 100.0, productive: 98.0,  nonProductive: 2.0,  uos: 0,  periodStart: '2026-03-24' },
+  'CC4210': { day:2, rollingActual:368.6, todayHrs:190.0, productive:168.0, nonProductive:22.0, uos:44, periodStart:'2026-03-24' },
+  'CC4215': { day:2, rollingActual:340.2, todayHrs:172.0, productive:155.0, nonProductive:17.0, uos:40, periodStart:'2026-03-24' },
+  'CC3110': { day:2, rollingActual:490.0, todayHrs:252.0, productive:240.0, nonProductive:12.0, uos:12, periodStart:'2026-03-24' },
+  'CC3120': { day:2, rollingActual:388.0, todayHrs:200.0, productive:184.0, nonProductive:16.0, uos:18, periodStart:'2026-03-24' },
+  'CC2050': { day:2, rollingActual:610.0, todayHrs:295.0, productive:270.0, nonProductive:25.0, uos:110, periodStart:'2026-03-24' },
+  'CC2055': { day:2, rollingActual:162.0, todayHrs:84.0,  productive:76.0,  nonProductive:8.0,  uos:58,  periodStart:'2026-03-24' },
+  'CC6010': { day:2, rollingActual:558.0, todayHrs:270.0, productive:252.0, nonProductive:18.0, uos:16, periodStart:'2026-03-24' },
+  'CC6015': { day:2, rollingActual:248.0, todayHrs:132.0, productive:120.0, nonProductive:12.0, uos:14, periodStart:'2026-03-24' },
+  'CC7020': { day:2, rollingActual:430.0, todayHrs:216.0, productive:200.0, nonProductive:16.0, uos:8,  periodStart:'2026-03-24' },
+  'CC7025': { day:2, rollingActual:295.0, todayHrs:152.0, productive:140.0, nonProductive:12.0, uos:22, periodStart:'2026-03-24' },
+  'CC8010': { day:2, rollingActual:280.0, todayHrs:144.0, productive:132.0, nonProductive:12.0, uos:18, periodStart:'2026-03-24' },
+  'CC9001': { day:2, rollingActual:198.0, todayHrs:100.0, productive:98.0,  nonProductive:2.0,  uos:0,  periodStart:'2026-03-24' },
 };
 
-// ── M365 USER SIMULATION ──
-// In production: SharePoint provides _spPageContextInfo.userLoginName
-// Map user email → department cost center
 const USER_DEPT_MAP = {
-  'jsmith@health.org':   'CC4210',
-  'mlee@health.org':     'CC3110',
-  'rbrown@health.org':   'CC2050',
-  'kpatel@health.org':   'CC6010',
-  'admin@health.org':    null, // leadership — sees all
+  'jsmith@health.org':'CC4210','mlee@health.org':'CC3110',
+  'rbrown@health.org':'CC2050','kpatel@health.org':'CC6010','admin@health.org':null
 };
 
-// Simulate: read ?dept= URL param, fall back to simulated user
 function getCurrentUser() {
-  const params = new URLSearchParams(window.location.search);
-  const deptParam = params.get('dept');
-  // Simulate M365 user
-  const users = Object.keys(USER_DEPT_MAP);
-  const simUser = users[Math.floor(Math.random() * (users.length - 1))]; // not admin
-  return {
-    email: simUser,
-    name: simUser.split('@')[0].replace(/([a-z])([A-Z])/g,'$1 $2'),
-    deptId: deptParam || USER_DEPT_MAP[simUser],
-    isLeadership: !deptParam && USER_DEPT_MAP[simUser] === null,
-    urlParam: deptParam
-  };
+  var params = new URLSearchParams(window.location.search);
+  var deptParam = params.get('dept');
+  var users = Object.keys(USER_DEPT_MAP);
+  var simUser = users[Math.floor(Math.random() * (users.length - 1))];
+  return { email: simUser, deptId: deptParam || USER_DEPT_MAP[simUser], urlParam: deptParam };
 }
 
-// ── CALCULATION ENGINE ──
 function calcDept(deptId) {
-  const dept = DEPARTMENTS.find(d => d.id === deptId);
-  const data = DAILY_DATA[deptId];
+  var dept = null;
+  for (var i=0; i<DEPARTMENTS.length; i++) { if (DEPARTMENTS[i].id === deptId) { dept = DEPARTMENTS[i]; break; } }
+  var data = DAILY_DATA[deptId];
   if (!dept || !data) return null;
-
-  const totalDays = 14;
-  const day = data.day;
-  const budget = dept.budgetHrs;
-  const rollingActual = data.rollingActual;
-  const todayHrs = data.todayHrs;
-  const hrsPerFTE = dept.type === 'fixed' ? 12 : 8;
-
-  const priorActual = rollingActual - todayHrs;
-  const remainingDays = totalDays - day + 1; // incl today
-  const budgetBeforeToday = budget - priorActual;
-  const allowedMax = remainingDays > 0 ? budgetBeforeToday / remainingDays : 0;
-
-  const remainingBudget = budget - rollingActual; // after today
-  const daysAfterToday = totalDays - day;
-  const allowedTomorrow = daysAfterToday > 0 ? remainingBudget / daysAfterToday : 0;
-
-  const deltaToday = todayHrs - allowedMax;
-  const util = allowedMax > 0 ? (todayHrs / allowedMax) * 100 : 0;
-  const fteTomorrow = allowedTomorrow / hrsPerFTE;
-  const fteCurrent = todayHrs / hrsPerFTE;
-
-  const statusClass = util <= 100 ? 'ok' : util <= 110 ? 'warn' : 'over';
-  const expectedPct = (day / totalDays) * 100;
-  const actualPct = (rollingActual / budget) * 100;
-
-  // Period label
-  const ps = new Date(data.periodStart + 'T00:00:00');
-  const pe = new Date(ps); pe.setDate(ps.getDate() + 13);
-  const fmt = d => d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-
-  return {
-    dept, data, day, totalDays, budget, rollingActual, todayHrs,
-    hrsPerFTE, priorActual, remainingDays, budgetBeforeToday,
-    allowedMax, remainingBudget, daysAfterToday, allowedTomorrow,
-    deltaToday, util, fteTomorrow, fteCurrent, statusClass,
-    expectedPct, actualPct,
-    periodLabel: `${fmt(ps)} – ${fmt(pe)}`,
-    periodDay: `Day ${day} of 14`,
-    periodProgress: `${((day/14)*100).toFixed(0)}% through period`,
-    cushion: remainingBudget,
-  };
+  var totalDays=14, day=data.day, budget=dept.budgetHrs;
+  var rollingActual=data.rollingActual, todayHrs=data.todayHrs;
+  var hrsPerFTE = dept.type === 'fixed' ? 12 : 8;
+  var priorActual = rollingActual - todayHrs;
+  var remainingDays = totalDays - day + 1;
+  var budgetBeforeToday = budget - priorActual;
+  var allowedMax = remainingDays > 0 ? budgetBeforeToday / remainingDays : 0;
+  var remainingBudget = budget - rollingActual;
+  var daysAfterToday = totalDays - day;
+  var allowedTomorrow = daysAfterToday > 0 ? remainingBudget / daysAfterToday : 0;
+  var deltaToday = todayHrs - allowedMax;
+  var util = allowedMax > 0 ? (todayHrs / allowedMax) * 100 : 0;
+  var fteTomorrow = allowedTomorrow / hrsPerFTE;
+  var fteCurrent = todayHrs / hrsPerFTE;
+  var statusClass = util <= 100 ? 'ok' : util <= 110 ? 'warn' : 'over';
+  var expectedPct = (day / totalDays) * 100;
+  var actualPct = (rollingActual / budget) * 100;
+  var ps = new Date(data.periodStart + 'T00:00:00');
+  var pe = new Date(ps); pe.setDate(ps.getDate() + 13);
+  var fmt = function(d) { return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); };
+  return { dept:dept, data:data, day:day, totalDays:totalDays, budget:budget,
+    rollingActual:rollingActual, todayHrs:todayHrs, hrsPerFTE:hrsPerFTE,
+    priorActual:priorActual, remainingDays:remainingDays, budgetBeforeToday:budgetBeforeToday,
+    allowedMax:allowedMax, remainingBudget:remainingBudget, daysAfterToday:daysAfterToday,
+    allowedTomorrow:allowedTomorrow, deltaToday:deltaToday, util:util,
+    fteTomorrow:fteTomorrow, fteCurrent:fteCurrent, statusClass:statusClass,
+    expectedPct:expectedPct, actualPct:actualPct,
+    periodLabel: fmt(ps) + ' - ' + fmt(pe),
+    periodDay: 'Day ' + day + ' of 14',
+    periodProgress: Math.round((day/14)*100) + '% through period',
+    cushion: remainingBudget };
 }
 
-// ── RENDER MANAGER VIEW ──
+function el(id) { return document.getElementById(id); }
+
 function renderManager(deptId) {
-  const c = calcDept(deptId);
+  var c = calcDept(deptId);
   if (!c) return;
-
-  // Period band
-  document.getElementById('periodLabel').textContent = c.periodLabel;
-  document.getElementById('periodDay').textContent = c.periodDay;
-  document.getElementById('periodProgress').textContent = c.periodProgress;
-
-  // URL banner
-  const banner = document.getElementById('urlBanner');
-  const urlParam = document.getElementById('urlParamDisplay');
-  if (c.data) {
-    banner.style.display = 'flex';
-    urlParam.textContent = `?dept=${deptId}`;
-  }
-
-  // Dept header
-  document.getElementById('mgr-deptName').textContent = c.dept.name;
-  const typeEl = document.getElementById('mgr-deptType');
+  el('periodLabel').textContent = c.periodLabel;
+  el('periodDay').textContent = c.periodDay;
+  el('periodProgress').textContent = c.periodProgress;
+  el('urlParamDisplay').textContent = '?dept=' + deptId;
+  el('mgr-deptName').textContent = c.dept.name;
+  var typeEl = el('mgr-deptType');
   typeEl.textContent = c.dept.type.charAt(0).toUpperCase() + c.dept.type.slice(1);
-  typeEl.className = `dept-tag type-${c.dept.type}`;
-  document.getElementById('mgr-costCenter').textContent = `CC: ${c.dept.id}`;
-  document.getElementById('mgr-whu').textContent = `WHpU: ${c.dept.whu}`;
-  document.getElementById('mgr-lastUpdated').textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  typeEl.className = 'dept-tag type-' + c.dept.type;
+  el('mgr-costCenter').textContent = 'CC: ' + c.dept.id;
+  el('mgr-whu').textContent = 'WHpU: ' + c.dept.whu;
+  el('mgr-lastUpdated').textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
 
-  // Status card
-  const card = document.getElementById('mgr-statusCard');
-  card.className = `status-card ${c.statusClass}`;
-  const icon = document.getElementById('mgr-statusIcon');
-  const headline = document.getElementById('mgr-headline');
-  const sub = document.getElementById('mgr-sub');
-  const bigNum = document.getElementById('mgr-bigNum');
-  const bigLabel = document.getElementById('mgr-bigLabel');
-
+  var card = el('mgr-statusCard');
+  card.className = 'status-card ' + c.statusClass;
+  var icon = el('mgr-statusIcon');
   if (c.statusClass === 'ok') {
-    icon.textContent = '✓';
-    headline.textContent = 'On Budget — Keep It Up';
-    sub.textContent = `Day ${c.day} of 14: You've used ${c.rollingActual.toFixed(1)} hrs of your ${c.budget.toLocaleString()} hr budget. Today's ceiling is ${c.allowedMax.toFixed(1)} hrs — you're right on pace. Tomorrow's target: ${c.allowedTomorrow.toFixed(1)} hrs.`;
+    icon.textContent = 'OK';
+    el('mgr-headline').textContent = 'On Budget - Keep It Up';
+    el('mgr-sub').textContent = 'Day ' + c.day + ' of 14: You have used ' + c.rollingActual.toFixed(1) + ' hrs of your ' + c.budget.toLocaleString() + ' hr budget. Today\'s ceiling is ' + c.allowedMax.toFixed(1) + ' hrs. Tomorrow\'s target: ' + c.allowedTomorrow.toFixed(1) + ' hrs.';
   } else if (c.statusClass === 'warn') {
-    icon.textContent = '!';
-    headline.textContent = `Watch It — ${(c.util-100).toFixed(1)}% Over Today's Ceiling`;
-    sub.textContent = `Day ${c.day} of 14: You used ${c.todayHrs.toFixed(1)} hrs vs. your ${c.allowedMax.toFixed(1)} hr ceiling. That's ${Math.abs(c.deltaToday).toFixed(1)} hrs over. To stay on budget, each remaining day must average ${c.allowedTomorrow.toFixed(1)} hrs or less.`;
+    icon.textContent = '!!';
+    el('mgr-headline').textContent = 'Watch It - ' + (c.util-100).toFixed(1) + '% Over Today\'s Ceiling';
+    el('mgr-sub').textContent = 'Day ' + c.day + ' of 14: You used ' + c.todayHrs.toFixed(1) + ' hrs vs. your ' + c.allowedMax.toFixed(1) + ' hr ceiling. That\'s ' + Math.abs(c.deltaToday).toFixed(1) + ' hrs over. Each remaining day must average ' + c.allowedTomorrow.toFixed(1) + ' hrs or less.';
   } else {
-    icon.textContent = '↑';
-    headline.textContent = `Over Budget — Review Required`;
-    sub.textContent = `Day ${c.day} of 14: You used ${c.todayHrs.toFixed(1)} hrs — ${Math.abs(c.deltaToday).toFixed(1)} hrs over the ${c.allowedMax.toFixed(1)} hr ceiling (${c.util.toFixed(0)}% utilization). Remaining ${c.daysAfterToday} days must each average ${c.allowedTomorrow.toFixed(1)} hrs to finish on budget. Contact your director.`;
+    icon.textContent = '!!';
+    el('mgr-headline').textContent = 'Over Budget - Review Required';
+    el('mgr-sub').textContent = 'Day ' + c.day + ' of 14: You used ' + c.todayHrs.toFixed(1) + ' hrs - ' + Math.abs(c.deltaToday).toFixed(1) + ' hrs over the ' + c.allowedMax.toFixed(1) + ' hr ceiling (' + c.util.toFixed(0) + '% utilization). Remaining ' + c.daysAfterToday + ' days must each average ' + c.allowedTomorrow.toFixed(1) + ' hrs. Contact your director.';
   }
-  bigNum.textContent = c.fteCurrent.toFixed(2);
-  bigLabel.textContent = `FTE today (${c.hrsPerFTE}hr shifts)`;
+  el('mgr-bigNum').textContent = c.fteCurrent.toFixed(2);
+  el('mgr-bigLabel').textContent = 'FTE today (' + c.hrsPerFTE + 'hr shifts)';
 
-  // Progress bar
-  const fill = document.getElementById('mgr-trackFill');
+  var fill = el('mgr-trackFill');
   fill.style.width = Math.min(c.actualPct, 100) + '%';
-  fill.className = `track-inner ${c.statusClass}`;
-  document.getElementById('mgr-paceLine').style.left = Math.min(c.expectedPct, 100) + '%';
-  document.getElementById('mgr-progressMid').textContent = `${c.rollingActual.toFixed(1)} used (${c.actualPct.toFixed(1)}%)`;
-  document.getElementById('mgr-budgetMax').textContent = `${c.budget.toLocaleString()} hrs`;
+  fill.className = 'track-inner ' + c.statusClass;
+  el('mgr-paceLine').style.left = Math.min(c.expectedPct, 100) + '%';
+  el('mgr-progressMid').textContent = c.rollingActual.toFixed(1) + ' used (' + c.actualPct.toFixed(1) + '%)';
+  el('mgr-budgetMax').textContent = c.budget.toLocaleString() + ' hrs';
 
-  // Day ticks
-  const ticks = document.getElementById('mgr-dayTicks');
-  ticks.innerHTML = [1,4,7,10,14].map(d =>
-    `<span class="day-tick${d === c.day ? ' current' : ''}">Day ${d}${d === c.day ? ' ◀' : ''}</span>`
-  ).join('');
+  var ticks = el('mgr-dayTicks');
+  ticks.innerHTML = [1,4,7,10,14].map(function(d) {
+    return '<span class="day-tick' + (d===c.day?' current':'') + '">Day ' + d + (d===c.day?' *':'') + '</span>';
+  }).join('');
 
-  // KPIs
-  document.getElementById('k-budget').textContent = c.budget.toLocaleString() + ' hrs';
-  const kActual = document.getElementById('k-actual');
-  kActual.textContent = c.rollingActual.toFixed(1) + ' hrs';
-  kActual.className = `kpi-val val-${c.statusClass === 'ok' ? 'green' : c.statusClass === 'warn' ? 'yellow' : 'red'}`;
-  // use a local variable to avoid collision
-  const kActualSub = document.getElementById('k-actual-sub');
-  kActualSub.textContent = `through day ${c.day}`;
-  const kBadge = document.getElementById('k-actual-badge');
-  const dSign = c.deltaToday > 0 ? '+' : '';
-  kBadge.textContent = `${dSign}${c.deltaToday.toFixed(1)} vs ceiling`;
-  kBadge.className = `kpi-badge ${c.deltaToday <= 0 ? 'badge-green' : c.deltaToday < 5 ? 'badge-yellow' : 'badge-red'}`;
-
-  document.getElementById('k-remaining').textContent = c.remainingBudget.toFixed(0) + ' hrs';
-  document.getElementById('k-remaining-sub').textContent = `${c.daysAfterToday} days after today`;
-
-  const kUtil = document.getElementById('k-util');
+  el('k-budget').textContent = c.budget.toLocaleString() + ' hrs';
+  var kA = el('k-actual');
+  kA.textContent = c.rollingActual.toFixed(1) + ' hrs';
+  kA.className = 'kpi-val val-' + (c.statusClass==='ok'?'green':c.statusClass==='warn'?'yellow':'red');
+  el('k-actual-sub').textContent = 'through day ' + c.day;
+  var kBadge = el('k-actual-badge');
+  kBadge.textContent = (c.deltaToday>0?'+':'') + c.deltaToday.toFixed(1) + ' vs ceiling';
+  kBadge.className = 'kpi-badge ' + (c.deltaToday<=0?'badge-green':c.deltaToday<5?'badge-yellow':'badge-red');
+  el('k-remaining').textContent = c.remainingBudget.toFixed(0) + ' hrs';
+  el('k-remaining-sub').textContent = c.daysAfterToday + ' days after today';
+  var kUtil = el('k-util');
   kUtil.textContent = c.util.toFixed(1) + '%';
-  kUtil.className = `kpi-val ${c.util <= 100 ? 'val-green' : c.util <= 110 ? 'val-yellow' : 'val-red'}`;
-  const kUtilBadge = document.getElementById('k-util-badge');
-  kUtilBadge.textContent = c.util <= 100 ? '✓ Within ceiling' : `${(c.util-100).toFixed(1)}% over`;
-  kUtilBadge.className = `kpi-badge ${c.util <= 100 ? 'badge-green' : c.util <= 110 ? 'badge-yellow' : 'badge-red'}`;
+  kUtil.className = 'kpi-val ' + (c.util<=100?'val-green':c.util<=110?'val-yellow':'val-red');
+  var kUB = el('k-util-badge');
+  kUB.textContent = c.util<=100 ? 'Within ceiling' : (c.util-100).toFixed(1) + '% over';
+  kUB.className = 'kpi-badge ' + (c.util<=100?'badge-green':c.util<=110?'badge-yellow':'badge-red');
 
-  // Today/Tomorrow
-  document.getElementById('mgr-todayDay').textContent = c.day;
-  document.getElementById('mgr-tomorrowDay').textContent = Math.min(c.day + 1, 14);
-  document.getElementById('f-ceiling').textContent = c.allowedMax.toFixed(1) + ' hrs';
-  document.getElementById('f-actual').textContent = c.todayHrs.toFixed(1) + ' hrs';
-  const fDelta = document.getElementById('f-delta');
-  fDelta.textContent = (c.deltaToday > 0 ? '+' : '') + c.deltaToday.toFixed(1) + ' hrs';
-  fDelta.className = `panel-row-val ${c.deltaToday <= 0 ? 'val-green' : c.deltaToday < 5 ? 'val-yellow' : 'val-red'}`;
-  document.getElementById('f-util').textContent = c.util.toFixed(1) + '%';
-  const prod = c.data.productive || 0;
-  const nonProd = c.data.nonProductive || 0;
-  document.getElementById('f-prodSplit').textContent = `${prod.toFixed(1)} prod / ${nonProd.toFixed(1)} non-prod`;
+  el('mgr-todayDay').textContent = c.day;
+  el('mgr-tomorrowDay').textContent = Math.min(c.day+1,14);
+  el('f-ceiling').textContent = c.allowedMax.toFixed(1) + ' hrs';
+  el('f-actual').textContent = c.todayHrs.toFixed(1) + ' hrs';
+  var fD = el('f-delta');
+  fD.textContent = (c.deltaToday>0?'+':'') + c.deltaToday.toFixed(1) + ' hrs';
+  fD.className = 'panel-row-val ' + (c.deltaToday<=0?'val-green':c.deltaToday<5?'val-yellow':'val-red');
+  el('f-util').textContent = c.util.toFixed(1) + '%';
+  el('f-prodSplit').textContent = (c.data.productive||0).toFixed(1) + ' prod / ' + (c.data.nonProductive||0).toFixed(1) + ' non-prod';
+  el('f-fteTomorrow').textContent = c.fteTomorrow.toFixed(2) + ' FTE';
+  el('f-allowedTomorrow').textContent = c.allowedTomorrow.toFixed(1) + ' hrs';
+  el('f-remDays').textContent = c.daysAfterToday;
+  el('f-avgNeeded').textContent = c.allowedTomorrow.toFixed(1) + ' hrs/day';
+  var cush = el('f-cushion');
+  cush.textContent = (c.remainingBudget>=0?'+':'') + c.remainingBudget.toFixed(1) + ' hrs';
+  cush.className = 'panel-row-val ' + (c.remainingBudget>=0?'val-green':'val-red');
 
-  document.getElementById('f-fteTomorrow').textContent = c.fteTomorrow.toFixed(2) + ' FTE';
-  document.getElementById('f-allowedTomorrow').textContent = c.allowedTomorrow.toFixed(1) + ' hrs';
-  document.getElementById('f-remDays').textContent = c.daysAfterToday;
-  document.getElementById('f-avgNeeded').textContent = c.allowedTomorrow.toFixed(1) + ' hrs/day';
-  const cushionEl = document.getElementById('f-cushion');
-  cushionEl.textContent = (c.remainingBudget >= 0 ? '+' : '') + c.remainingBudget.toFixed(1) + ' hrs';
-  cushionEl.className = `panel-row-val ${c.remainingBudget >= 0 ? 'val-green' : 'val-red'}`;
-
-  // Formulas
-  document.getElementById('fml-shiftHrs').textContent = c.hrsPerFTE;
-  document.getElementById('fml-ceiling').textContent = `(${c.budget.toLocaleString()} − ${c.priorActual.toFixed(1)} prior) ÷ ${c.remainingDays} days = ${c.allowedMax.toFixed(1)} hrs`;
-  document.getElementById('fml-delta').textContent = `${c.todayHrs.toFixed(1)} − ${c.allowedMax.toFixed(1)} = ${c.deltaToday > 0 ? '+' : ''}${c.deltaToday.toFixed(1)} hrs`;
-  document.getElementById('fml-tomorrow').textContent = `${c.remainingBudget.toFixed(1)} ÷ ${c.daysAfterToday} days = ${c.allowedTomorrow.toFixed(1)} hrs/day`;
-  document.getElementById('fml-fte').textContent = `${c.allowedTomorrow.toFixed(1)} ÷ ${c.hrsPerFTE} = ${c.fteTomorrow.toFixed(2)} FTE`;
-  document.getElementById('fml-util').textContent = `(${c.todayHrs.toFixed(1)} ÷ ${c.allowedMax.toFixed(1)}) × 100 = ${c.util.toFixed(1)}%`;
-  document.getElementById('fml-alert').textContent = `Current: ${c.util.toFixed(1)}% → ${c.statusClass.toUpperCase()}`;
+  el('fml-shiftHrs').textContent = c.hrsPerFTE;
+  el('fml-ceiling').textContent = '(' + c.budget.toLocaleString() + ' - ' + c.priorActual.toFixed(1) + ' prior) / ' + c.remainingDays + ' days = ' + c.allowedMax.toFixed(1) + ' hrs';
+  el('fml-delta').textContent = c.todayHrs.toFixed(1) + ' - ' + c.allowedMax.toFixed(1) + ' = ' + (c.deltaToday>0?'+':'') + c.deltaToday.toFixed(1) + ' hrs';
+  el('fml-tomorrow').textContent = c.remainingBudget.toFixed(1) + ' / ' + c.daysAfterToday + ' days = ' + c.allowedTomorrow.toFixed(1) + ' hrs/day';
+  el('fml-fte').textContent = c.allowedTomorrow.toFixed(1) + ' / ' + c.hrsPerFTE + ' = ' + c.fteTomorrow.toFixed(2) + ' FTE';
+  el('fml-util').textContent = '(' + c.todayHrs.toFixed(1) + ' / ' + c.allowedMax.toFixed(1) + ') x 100 = ' + c.util.toFixed(1) + '%';
+  el('fml-alert').textContent = 'Current: ' + c.util.toFixed(1) + '% = ' + c.statusClass.toUpperCase();
 }
 
-// ── RENDER LEADERSHIP VIEW ──
 function renderLeadership() {
-  let g = 0, w = 0, r = 0;
-  DEPARTMENTS.forEach(dept => {
-    const c = calcDept(dept.id);
+  var g=0,w=0,r=0;
+  DEPARTMENTS.forEach(function(dept) {
+    var c = calcDept(dept.id);
     if (!c) return;
-    if (c.statusClass === 'ok') g++;
-    else if (c.statusClass === 'warn') w++;
+    if (c.statusClass==='ok') g++;
+    else if (c.statusClass==='warn') w++;
     else r++;
   });
-  document.getElementById('ldr-countGreen').textContent = g;
-  document.getElementById('ldr-countYellow').textContent = w;
-  document.getElementById('ldr-countRed').textContent = r;
-  renderDeptCards('all');
-
-  // Period band
-  const first = calcDept(DEPARTMENTS[0].id);
+  el('ldr-countGreen').textContent = g;
+  el('ldr-countYellow').textContent = w;
+  el('ldr-countRed').textContent = r;
+  renderDeptCards('all','');
+  var first = calcDept(DEPARTMENTS[0].id);
   if (first) {
-    document.getElementById('periodLabel').textContent = first.periodLabel;
-    document.getElementById('periodDay').textContent = first.periodDay;
-    document.getElementById('periodProgress').textContent = first.periodProgress;
+    el('periodLabel').textContent = first.periodLabel;
+    el('periodDay').textContent = first.periodDay;
+    el('periodProgress').textContent = first.periodProgress;
   }
 }
 
-function renderDeptCards(filter, search = '') {
-  const grid = document.getElementById('leadershipGrid');
+function renderDeptCards(filter, search) {
+  var grid = el('leadershipGrid');
   grid.innerHTML = '';
-  DEPARTMENTS.forEach((dept, i) => {
-    const c = calcDept(dept.id);
+  var labels = {ok:'On Budget',warn:'Watch',over:'Over'};
+  var dotColors = {ok:'#2d9d5c',warn:'#d4900a',over:'#c0392b'};
+  DEPARTMENTS.forEach(function(dept, i) {
+    var c = calcDept(dept.id);
     if (!c) return;
     if (filter !== 'all' && filter !== c.statusClass && filter !== dept.type) return;
-    if (search && !dept.name.toLowerCase().includes(search.toLowerCase())) return;
-    const card = document.createElement('div');
-    card.className = `dept-card ${c.statusClass}`;
-    card.style.animationDelay = (i * 0.04) + 's';
-    card.onclick = () => { switchView('manager'); renderManager(dept.id); };
-    const statusLabels = { ok: 'On Budget', warn: 'Watch', over: 'Over' };
-    card.innerHTML = `
-      <div class="dept-card-top">
-        <div class="dept-card-name">${dept.name}</div>
-        <div class="dept-card-type">${dept.type} · ${dept.id}</div>
-      </div>
-      <div class="dept-card-bottom">
-        <div class="dept-card-util">${c.util.toFixed(1)}%</div>
-        <div class="dept-card-detail">${c.todayHrs.toFixed(1)} hrs today · ceiling ${c.allowedMax.toFixed(1)}</div>
-        <div class="dept-card-status">
-          <div class="status-dot ${c.statusClass}"></div>
-          <span style="color:#7a7870">${statusLabels[c.statusClass]} · ${(c.deltaToday > 0 ? '+' : '')}${c.deltaToday.toFixed(1)} hrs vs ceiling</span>
-        </div>
-      </div>`;
+    if (search && dept.name.toLowerCase().indexOf(search.toLowerCase()) === -1) return;
+    var card = document.createElement('div');
+    card.className = 'dept-card ' + c.statusClass;
+    card.onclick = function() { switchView('manager'); renderManager(dept.id); };
+    card.innerHTML = '<div class="dept-card-top"><div class="dept-card-name">' + dept.name + '</div><div class="dept-card-type">' + dept.type + ' - ' + dept.id + '</div></div>'
+      + '<div class="dept-card-bottom"><div class="dept-card-util">' + c.util.toFixed(1) + '%</div>'
+      + '<div class="dept-card-detail">' + c.todayHrs.toFixed(1) + ' hrs today - ceiling ' + c.allowedMax.toFixed(1) + '</div>'
+      + '<div class="dept-card-status"><div class="status-dot ' + c.statusClass + '"></div><span style="color:#7a7870">' + labels[c.statusClass] + ' - ' + (c.deltaToday>0?'+':'') + c.deltaToday.toFixed(1) + ' hrs</span></div></div>';
     grid.appendChild(card);
   });
 }
 
-let currentFilter = 'all';
+var currentFilter = 'all';
 function filterDepts(f, btn) {
   currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   renderDeptCards(f, document.querySelector('.search-input').value);
 }
-function searchDepts(val) {
-  renderDeptCards(currentFilter, val);
-}
+function searchDepts(val) { renderDeptCards(currentFilter, val); }
 
-// ── ADMIN ──
 function populateAdminSelect() {
-  const sel = document.getElementById('admin-deptSelect');
-  sel.innerHTML = DEPARTMENTS.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
-  // Set default date
-  const ps = new Date(Object.values(DAILY_DATA)[0].periodStart + 'T00:00:00');
-  document.getElementById('admin-periodStart').value = ps.toISOString().split('T')[0];
+  var sel = el('admin-deptSelect');
+  sel.innerHTML = DEPARTMENTS.map(function(d){return '<option value="'+d.id+'">'+d.name+'</option>';}).join('');
+  var ps = new Date(Object.values(DAILY_DATA)[0].periodStart+'T00:00:00');
+  el('admin-periodStart').value = ps.toISOString().split('T')[0];
 }
-
 function loadAdminDept() {
-  const id = document.getElementById('admin-deptSelect').value;
-  const data = DAILY_DATA[id];
+  var id = el('admin-deptSelect').value;
+  var data = DAILY_DATA[id];
   if (data) {
-    document.getElementById('admin-day').value = data.day;
-    document.getElementById('admin-todayHrs').value = data.todayHrs;
-    document.getElementById('admin-rollingActual').value = data.rollingActual;
-    document.getElementById('admin-productive').value = data.productive || '';
-    document.getElementById('admin-nonProductive').value = data.nonProductive || '';
-    document.getElementById('admin-uos').value = data.uos || '';
-    document.getElementById('admin-periodStart').value = data.periodStart;
+    el('admin-day').value = data.day;
+    el('admin-todayHrs').value = data.todayHrs;
+    el('admin-rollingActual').value = data.rollingActual;
+    el('admin-productive').value = data.productive||'';
+    el('admin-nonProductive').value = data.nonProductive||'';
+    el('admin-uos').value = data.uos||'';
+    el('admin-periodStart').value = data.periodStart;
   }
 }
-
 function saveAdminEntry() {
-  const id = document.getElementById('admin-deptSelect').value;
+  var id = el('admin-deptSelect').value;
   DAILY_DATA[id] = {
-    day: parseInt(document.getElementById('admin-day').value),
-    todayHrs: parseFloat(document.getElementById('admin-todayHrs').value) || 0,
-    rollingActual: parseFloat(document.getElementById('admin-rollingActual').value) || 0,
-    productive: parseFloat(document.getElementById('admin-productive').value) || 0,
-    nonProductive: parseFloat(document.getElementById('admin-nonProductive').value) || 0,
-    uos: parseFloat(document.getElementById('admin-uos').value) || 0,
-    periodStart: document.getElementById('admin-periodStart').value,
+    day: parseInt(el('admin-day').value),
+    todayHrs: parseFloat(el('admin-todayHrs').value)||0,
+    rollingActual: parseFloat(el('admin-rollingActual').value)||0,
+    productive: parseFloat(el('admin-productive').value)||0,
+    nonProductive: parseFloat(el('admin-nonProductive').value)||0,
+    uos: parseFloat(el('admin-uos').value)||0,
+    periodStart: el('admin-periodStart').value
   };
   renderAdminTable();
-  showToast();
-  document.getElementById('admin-saveNote').textContent = 'Saved at ' + new Date().toLocaleTimeString();
+  var t = el('saveToast'); t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},2800);
+  el('admin-saveNote').textContent = 'Saved at ' + new Date().toLocaleTimeString();
 }
-
 function clearAdminForm() {
-  ['admin-todayHrs','admin-rollingActual','admin-productive','admin-nonProductive','admin-uos'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
+  ['admin-todayHrs','admin-rollingActual','admin-productive','admin-nonProductive','admin-uos'].forEach(function(id){el(id).value='';});
 }
-
 function renderAdminTable() {
-  const tbody = document.getElementById('admin-deptTable');
-  tbody.innerHTML = DEPARTMENTS.map(dept => {
-    const c = calcDept(dept.id);
-    if (!c) return '';
-    const colors = { ok: '#2d9d5c', warn: '#d4900a', over: '#c0392b' };
-    return `<tr>
-      <td><span class="tbl-status" style="background:${colors[c.statusClass]}"></span></td>
-      <td>${dept.name}</td>
-      <td>${dept.type}</td>
-      <td>${dept.id}</td>
-      <td>${dept.budgetHrs.toLocaleString()}</td>
-      <td>${dept.whu}</td>
-      <td style="color:${colors[c.statusClass]};font-weight:500">${c.util.toFixed(1)}%</td>
-    </tr>`;
+  var tbody = el('admin-deptTable');
+  var colors = {ok:'#2d9d5c',warn:'#d4900a',over:'#c0392b'};
+  tbody.innerHTML = DEPARTMENTS.map(function(dept){
+    var c = calcDept(dept.id); if (!c) return '';
+    return '<tr><td><span class="tbl-status" style="background:'+colors[c.statusClass]+'"></span></td><td>'+dept.name+'</td><td>'+dept.type+'</td><td>'+dept.id+'</td><td>'+dept.budgetHrs.toLocaleString()+'</td><td>'+dept.whu+'</td><td style="color:'+colors[c.statusClass]+';font-weight:600">'+c.util.toFixed(1)+'%</td></tr>';
   }).join('');
 }
 
-function showToast() {
-  const t = document.getElementById('saveToast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
-
-// ── VIEW SWITCHING ──
 function switchView(v) {
-  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-  document.getElementById(`view-${v}`).classList.add('active');
-  ['Manager','Leadership','Admin'].forEach(name => {
-    document.getElementById(`btn${name}`).classList.toggle('active', name.toLowerCase() === v);
+  document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
+  el('view-'+v).classList.add('active');
+  ['Manager','Leadership','Admin'].forEach(function(name){
+    el('btn'+name).classList.toggle('active', name.toLowerCase()===v);
   });
-  if (v === 'leadership') renderLeadership();
-  if (v === 'admin') { populateAdminSelect(); loadAdminDept(); renderAdminTable(); }
+  if (v==='leadership') renderLeadership();
+  if (v==='admin') { populateAdminSelect(); loadAdminDept(); renderAdminTable(); }
 }
 
 function toggleFormula() {
-  const body = document.getElementById('formulaBody');
-  const toggle = document.getElementById('formulaToggle');
-  const btn = document.getElementById('formulaBtn');
+  var body = el('formulaBody'), toggle = el('formulaToggle'), btn = el('formulaBtn');
   body.classList.toggle('open');
   toggle.classList.toggle('open');
-  btn.textContent = body.classList.contains('open') ? 'Hide ▴' : 'Show ▾';
+  btn.textContent = body.classList.contains('open') ? 'Hide' : 'Show';
 }
 
-// ── INIT ──
 function init() {
-  const user = getCurrentUser();
-
-  // Set user chip
-  const nameParts = user.email.split('@')[0];
-  const initials = nameParts.slice(0,2).toUpperCase();
-  document.getElementById('avatarInitials').textContent = initials;
-  document.getElementById('userDisplay').textContent = user.email;
-
-  // Route to correct dept
-  const deptId = user.deptId || DEPARTMENTS[0].id;
-  renderManager(deptId);
-
-  // Show/hide leadership based on role
-  // In production: check SP group membership
-  // For demo: everyone can see all views
+  var user = getCurrentUser();
+  var initials = user.email.split('@')[0].slice(0,2).toUpperCase();
+  el('avatarInitials').textContent = initials;
+  el('userDisplay').textContent = user.email;
+  renderManager(user.deptId || DEPARTMENTS[0].id);
 }
-
 init();
 </script>
 
